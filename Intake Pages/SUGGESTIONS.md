@@ -110,6 +110,22 @@ guided journey.
 
 ---
 
+## Round 6 — Per-step guide videos (2026-06-15)
+
+**Files:** personal, income, assets, debts, expenses, financial-affairs,
+documents.html
+
+**What changed:** Each of the 7 intake pages now has a collapsible "Watch a
+quick guide to this section" bar under its title. Collapsed by default; clicking
+expands an inline video. Each step has its own placeholder slot + a tailored
+blurb (e.g. Assets = "what counts as an asset and why it's protected"). Real
+Vimeo IDs to be swapped per step — see the SWAP note in each guidevideo block.
+
+**Rationale:** Step-specific help reduces confusion without crowding the form —
+collapsed by default keeps the questions prominent for users who don't need it.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
