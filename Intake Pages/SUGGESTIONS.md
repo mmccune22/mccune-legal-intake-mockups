@@ -126,6 +126,113 @@ collapsed by default keeps the questions prominent for users who don't need it.
 
 ---
 
+## Round 7 — Conditional spouse block on marital status (2026-06-20)
+
+**Files:** personal.html, FIELD-MAP.md
+
+**What changed:** The "Filing jointly with a spouse?" toggle was removed from
+the always-on "A few quick questions" row. In its place, selecting **Married**
+in Marital status now reveals a dedicated **Your spouse** block: spouse name,
+other names, email, contact number, DOB, SSN, a "spouse lives at a different
+address" toggle (reveals spouse address only if checked), and the question
+"Will your spouse be filing jointly with you?" Answering that **Yes** expands a
+further follow-up ("Has your spouse filed bankruptcy before?"). The block stays
+hidden for Single/Separated/Divorced/Widowed.
+
+**Rationale:** Marital status and joint filing are different things — a married
+person can file individually. We still need spouse data on an individual filing
+(non-filing spouse appears on the SOFA; spouse income counts toward the means
+test / Schedule I), so "Married" justifies the basics. Only "filing jointly =
+Yes" makes the spouse a Debtor 2 with their own form columns, so the full
+co-debtor follow-ups gate on that. Avoids asking spouse questions of unmarried
+filers and avoids re-asking the address when it's shared.
+
+---
+
+## Round 8 — Reorder + conditional prior-BK and dependents; Schedule J match (2026-06-20)
+
+**Files:** personal.html, FIELD-MAP.md
+
+**What changed:**
+- **Marital status moved to the end** of the section (after dependents). It now
+  gates the spouse block that follows it.
+- **"Have you filed for bankruptcy before?"** — "Yes" reveals a single free-text
+  field (placeholder asks for case number, chapter, and approximate filing
+  date, best-effort). "No" reveals nothing.
+- **Dependents fixed:** the detail no longer shows regardless of answer. "Yes"
+  reveals per-dependent rows; "No" reveals nothing. Rows now match **Schedule J
+  / Official Form 106J exactly**: Relationship, Age, and "Lives with you?"
+  (Yes/No). The **name field was removed** — the official form explicitly says
+  "Do not state the dependents' names." "Add another dependent" retained.
+- Removed the old always-on "quick questions" row and the old name/age/
+  relationship dependent card.
+
+**Rationale:** Asking marital status last lets the debtor clear all the
+universal questions first, then branch into the spouse questions only if
+relevant. Gating prior-BK and dependents detail on "Yes" keeps the form short
+for the common case. Matching Schedule J's exact fields (and omitting names per
+the form's instruction) means the dependent data maps straight onto the
+petition with no rework.
+
+---
+
+## Round 9 — Spouse flow gated on joint-filing question (2026-06-20)
+
+**Files:** personal.html, FIELD-MAP.md
+
+**What changed:** Selecting Married no longer dumps all spouse fields. It now
+shows a single gating question — "Will your spouse be filing jointly with you?"
+(Yes / No / Unsure, inline pill style, no description). Each answer reveals a
+different thing:
+- **Yes** → full Debtor 2 block: spouse first/middle/last name, other names,
+  email, contact, home address ("Same as home address listed above" checkbox,
+  default checked), DOB, SSN, and "Has your spouse filed bankruptcy before?"
+  (with a free-text detail reveal). Mandatory fields carry red asterisks
+  matching the debtor. Omits marital status (already answered) and dependents
+  (shared household). Spouse mailing-address option removed as overkill.
+- **No** → a lightbulb info-tip (larger text, single paragraph, no fields):
+  married debtors can file individually, but the non-filing spouse's income is
+  still factored in, so income docs will be needed in the next section.
+- **Unsure** → same widget, copy framing it as a strategic decision to discuss
+  with the attorney; income docs still needed.
+
+Also: all toggles on the page now start unselected (no pre-filled answer);
+dependent rows match Schedule J (relationship/age/lives-with-you, no names);
+toggles sit inline beside their question label and align vertically.
+
+**Rationale:** A non-filing spouse often gets nervous about handing over
+personal data (SSN, DOB). Gating on the joint question means we only request
+spouse identity details when the spouse is actually a co-debtor. For No/Unsure
+we explain why income still matters and collect only what's needed (income
+docs), not identity. Matches how the petition treats Debtor 2 vs. a non-filing
+spouse.
+
+**Cross-section note:** Income section must add a non-filing-spouse income
+upload for the No/Unsure paths (the info-tips promise it).
+
+---
+
+## Round 10 — Conditional spouse documents (joint = Yes) (2026-06-20)
+
+**Files:** personal.html, documents.html, FIELD-MAP.md
+
+**What changed:** When joint filing = Yes, the left secure-upload sidebar now
+reveals a "Spouse documents" section: Spouse's driver's license (required),
+Spouse's Social Security card / W-2 / 1099 (required), and Spouse's tax returns
+for the last 2 years (marked "Only if filed separately," with N/A). The sidebar
+counter updates 0/4 → 0/7. A lightbulb info-tip at the top of the spouse block
+points the debtor to upload these in the secure bar. The page-7 Documents
+summary (documents.html) lists the same three spouse rows, tagged "if spouse is
+filing" / "if filed separately," group count bumped 4 → 7.
+
+**Rationale:** A co-filing spouse (Debtor 2) needs the same identity/income
+documents as the debtor. Surfacing them only on joint = Yes keeps the upload
+list short for individual filers, and the tax-return "if filed separately"
+qualifier avoids asking for a return that's already covered by the debtor's
+joint return.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

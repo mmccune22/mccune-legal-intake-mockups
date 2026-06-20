@@ -68,15 +68,48 @@ Reflects the live fields on `personal.html`. Form destination = Form 101 (Volunt
 | Mailing address (if different) |  | Form 101, Pt 1, Line 5 (Mailing address) | — | Manual | Revealed by checkbox; accepts P.O. Box |
 | Date of birth | ✓ | *(used for identity / dependents logic)* | License (barcode), 1040 | Deterministic | Typed MM/DD/YYYY |
 | Social Security number | ✓ | **Form 121** (Statement About SSN) — not printed on 101 | SSA card, W-2, 1099, 1040 | Deterministic | **Encrypt at rest.** Form 101 shows last 4 only; full SSN goes to Form 121 |
-| Marital status | ✓ | Drives joint-filing + Schedule I/J + **SOFA Q1** | 1040 (filing status) | Inferred | 1040 status ≈ marital status; confirm |
-| Filed bankruptcy before? |  | Form 101, Pt 3, Lines 9–10 (Prior cases) | — | Manual | "Yes" should reveal prior-case detail (district, case no., date) — *to build* |
-| Filing jointly with spouse? |  | Form 101 (joint flag) → enables **Debtor 2** block | 1040 (MFJ) | Inferred | "Yes" should reveal full Debtor 2 identity block — *to build* |
-| Has dependents? + Dependent rows (name, age, relationship) |  | **Schedule J, Line 2** (Dependents) | 1040 (dependents) | Inferred | Confirm against 1040; ages/relationship often manual |
+| Have you filed bankruptcy before? |  | Form 101, Pt 3, Lines 9–10 (Prior cases) | — | Manual | "Yes" reveals a free-text field: case number, chapter, approximate filing date (best-effort) |
+| → Prior bankruptcy detail (text) | shown on Yes | Form 101, Pt 3, Lines 9–10 | — | Manual | One textarea; attorney parses/verifies. Structured fields *to build* later if needed |
+| Has dependents? |  | **Schedule J, Line 2** (Dependents) | 1040 (dependents) | Inferred | "Yes" reveals per-dependent rows; "No" reveals nothing |
+| → Dependent rows: Relationship, Age, Lives with you? (Yes / No / Part-time) | shown on Yes | **Schedule J, Line 2** | 1040 | Inferred | **Matches Form 106J. NO name field** — the form says "Do not state the dependents' names." Form 106J only has Yes/No for "lives with you" — **"Part-time" maps to Yes** with the nuance noted for the attorney. "Add another dependent" clones a row |
+| Marital status | ✓ | Drives spouse block + Schedule I/J + **SOFA Q1** | 1040 (filing status) | Inferred | **Placed LAST in the section.** 1040 status ≈ marital status; confirm. "Married" reveals the Spouse block below |
 | Note to attorney |  | *(internal — not a form line)* | — | Manual | Firm intake note |
 
+**Personal Info field order (individual debtor):** name → other names → email/phone → home address → mailing (if diff) → DOB → SSN → prior bankruptcy → dependents → **marital status (last)** → spouse block (if Married) → note to attorney.
+
+### Spouse flow — revealed only when Marital status = "Married"
+
+When Married is selected, the **only** thing shown is one gating question:
+
+**"Will your spouse be filing jointly with you?" → Yes / No / Unsure**
+
+This gates everything else, so a nervous non-filing spouse is never asked for personal data up front. What each answer reveals:
+
+| Answer | What appears | Why |
+|---|---|---|
+| **Yes** | Full **Debtor 2** block (fields below) | Spouse becomes a co-debtor with their own Form 101 columns + Form 121 SSN |
+| **No** | Info-tip only (no fields) | Individual filing is allowed; non-filing spouse's **income still counts** (means test / Schedule I). Notice tells them income docs are needed in the Income section |
+| **Unsure** | Info-tip only (no fields) | Same as No, but copy frames it as a strategic decision to discuss with the attorney. Income docs still needed |
+
+**Debtor 2 block — shown only on "Yes".** Omits marital status (already answered) and dependents (shared household → listed once on Schedule J). All fields below mirror the debtor's mandatory set.
+
+| Intake field | Req | → Form destination | ← Source doc(s) | Extraction | Notes |
+|---|---|---|---|---|---|
+| Spouse first / last name | ✓ | Form 101 Debtor 2, Line 1 | Spouse license, 1040 | Inferred | Deterministic if spouse license uploaded |
+| Spouse middle name |  | Form 101 Debtor 2, Line 1 | Spouse license, 1040 | Inferred | |
+| Spouse other names (last 8 yrs) |  | Form 101 Debtor 2, Line 2 | — | Manual | |
+| Spouse email | ✓ | *(firm contact)* | — | Manual | |
+| Spouse contact number | ✓ | *(firm contact)* | — | Manual | |
+| Spouse home address (street/city/state/ZIP) | ✓ | Form 101 Debtor 2 address | License | Inferred | "Same as home address listed above" checkbox (default checked → hides fields). **No mailing-address option** (removed as overkill) |
+| Spouse date of birth | ✓ | Identity (Debtor 2) | Spouse license, 1040 | Inferred | |
+| Spouse SSN | ✓ | **Form 121** (2nd SSN) | Spouse SSA/W-2/1040 | Inferred | **Encrypt at rest** |
+| Has your spouse filed bankruptcy before? |  | Form 101 Debtor 2, Pt 3 Lines 9–10 | — | Manual | "Yes" reveals a free-text detail box (same as debtor's) |
+
+> **Cross-section dependency:** when joint = **No or Unsure**, the **Income** section must surface a **non-filing-spouse income upload** (pay stubs / proof of income) — the No/Unsure info-tips promise it. Wire this when building Income.
+
 ### Personal Info — still to build
-- **Prior bankruptcy detail** revealed on "Yes" → Form 101 Pt 3 Lines 9–10 (district, case number, filing date, chapter, disposition).
-- **Debtor 2 (spouse) identity block** revealed on "Filing jointly = Yes" → mirrors Debtor 1 fields for Form 101 Pt 1 columns / Form 121 second SSN.
+- **Prior bankruptcy detail** is currently a single free-text field. If the dev wants structured form-fill, split into district / case number / filing date / chapter / disposition later.
+- **Spouse prior-bankruptcy detail** (revealed on the spouse's "Yes") could likewise be expanded from Yes/No to detail fields, parallel to Debtor 1.
 
 ---
 
@@ -122,7 +155,7 @@ Each intake step has a sidebar listing the documents needed for that section. Th
 
 | Step | Page | Documents in sidebar | Required? |
 |---|---|---|---|
-| 1 — Personal Info | personal.html | Driver's license; SSA card / W-2 / 1099; Tax return (last yr); Tax return (2 yrs ago) | License + SSN doc required; tax returns needed (N/A allowed) |
+| 1 — Personal Info | personal.html | Driver's license; SSA card / W-2 / 1099; Tax return (last yr); Tax return (2 yrs ago). **If joint = Yes:** + Spouse's driver's license, Spouse's SSN doc, Spouse's tax returns (only if filed separately) | License + SSN doc required; tax returns needed (N/A allowed). Spouse docs revealed in the sidebar only when joint filing = Yes; also listed on the page-7 summary tagged "if spouse is filing" |
 | 2 — Income | income.html | Pay stubs (6 mo), other income proof | Required |
 | 3 — Assets | assets.html | Titles, deeds, account statements | Per applicability |
 | 4 — Debts | debts.html | **Statements for all debts** | Required (no N/A — drives creditor schedules) |
