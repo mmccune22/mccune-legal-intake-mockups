@@ -153,6 +153,26 @@ These are *outputs* the system calculates from data collected elsewhere. They ex
 
 ---
 
+## SECTION 3 — Assets (Schedule A/B)
+
+`assets.html`. In progress — Real estate done; Vehicles / Financial accounts / Other assets / Household belongings still to rework.
+
+**Real estate** — gated: "Do you own or have any interest in any real estate?" → Yes reveals property card(s) (repeatable):
+
+| Intake field | → Form destination | ← Source doc(s) | Extraction | Notes |
+|---|---|---|---|---|
+| Property address | Schedule A/B Pt 1 | — | Manual | |
+| Home purchase date (MM/YYYY) | Schedule A/B Pt 1 | — | Manual | |
+| Estimated value | Schedule A/B Pt 1 (current value) | Zillow valuation | Manual | Zillow.com link + upload the valuation |
+| Do you want to keep the house? | (intent of debtor / Statement of Intention) | — | Manual | |
+| Are you behind on mortgage payments? | (arrears context) | — | Manual | Yes → foreclosure info-tip (file before sale date; upload foreclosure docs) |
+
+> **Mortgage balance / monthly payment / HOA are NOT collected here** — they move to **Debts (Schedule D)**. Assets captures the property + value; the mortgage is a secured debt.
+
+**Assets documents (sidebar):** Zillow valuation statement; Foreclosure documents (if any); Other account statements (401k/IRA); Lien-free vehicle title; Vehicle/asset valuation — each "needed" + N/A.
+
+---
+
 ## SECTION 6 — Statement of Financial Affairs (Form 107)
 
 `financial-affairs.html` mirrors Form 107 exactly: all 26 numbered questions, in official order, grouped under the form's 11 parts. Each is a Yes/No that (when built out) reveals the detail fields for that question. Several overlap with data collected earlier and should be **carried through read-only**, not re-asked.

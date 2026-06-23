@@ -268,6 +268,39 @@ asking for spouse identity details that aren't needed unless filing jointly.
 
 ---
 
+## Round 12 — Assets: titles + Real estate rebuild (2026-06-23)
+
+**Files:** assets.html
+
+**What changed:**
+- Title kept "Assets"; subtitle reworded (exempt/protected framing, detailed
+  list with valuations). Intro box heading changed "What you own" → "Assets"
+  with a one-line instruction; removed the specific doc list (uploads are
+  conditional).
+- **Real estate** converted to a gated question: "Do you own or have any
+  interest in any real estate?" (residence, condo, home, land, timeshare,
+  mobile home…) — starts blank, inline compact pill. Yes reveals the property
+  card; No hides it.
+- Property card (repeatable, ✕ Remove, hidden when one): address, home purchase
+  date (MM/YYYY), estimated value with a clickable Zillow.com link + upload
+  note. Two separate questions: "Do you want to keep the house?" and "Are you
+  behind on mortgage payments?" — behind = Yes reveals a foreclosure info-tip
+  ("must be filed before the sale date"). A dashed note says mortgage/HOA
+  amounts and statements go in the Debts section.
+- **Mortgage balance / monthly payment / HOA money fields removed** from Assets
+  — they belong in Debts (Schedule D).
+- Upload sidebar: replaced "Real estate tax assessment" with **Zillow valuation
+  statement** (top) and added **Foreclosure documents · if any**.
+- Ported the "toggles start unselected (no default)" fix to this page's shared
+  script; cleared pre-set Yes on vehicle Financed?/Keep it? toggles.
+
+**Rationale:** Assets should capture the property and its value (Schedule A/B);
+the mortgage is a debt (Schedule D), so amounts move to Debts to avoid asking
+twice and to match the forms. Gating real estate keeps the section clean. Zillow
+link + valuation upload gives a concrete way to establish value.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
