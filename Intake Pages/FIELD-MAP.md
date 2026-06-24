@@ -182,7 +182,33 @@ These are *outputs* the system calculates from data collected elsewhere. They ex
 
 > **Vehicle loan balance / payment NOT collected here** — move to **Debts (Schedule D)**, same as the mortgage.
 
-**Assets documents (sidebar):** Zillow valuation statement; Foreclosure documents (if any); KBB valuation statement; Vehicle title (if any); Vehicle repossession documents (if any); Other account statements (401k/IRA) — each "needed" + N/A. (Removed "Lien-free vehicle title" and "Vehicle/asset valuation.")
+**Personal and Household Items** (Schedule A/B Part 3, Q6–14) — value rows matching the official categories: Household goods & furnishings, Electronics, Collectibles of value, Sports & hobby equipment, Firearms, Clothes, Jewelry, Animals/pets, and Other personal & household items (describe + value). Garage-sale value guidance.
+
+**Financial Assets** (Schedule A/B Part 4, Q16–35) — intro "Do you own or have any interest in any of the following:" then each item as a Yes/No that reveals a value (and describe/repeatable card where noted):
+
+| Item | Reveal | Form line |
+|---|---|---|
+| Cash on hand | value | Q16 |
+| Bank or financial accounts | repeatable card (institution/type/value) + "most recent statement → Bank or financial account statements box, unless already in Income" | Q17 |
+| Bonds, mutual funds, publicly traded stocks | repeatable card + statement → Investments box | Q18 |
+| Ownership in a business | describe + value | Q19 |
+| Government/corporate bonds, other instruments | describe + value | Q20 |
+| Retirement or pension accounts | repeatable card + statement → Investments box | Q21 |
+| Security deposits or prepayments | describe + value | Q22 |
+| Annuities | repeatable card + statement → Investments box | Q23 |
+| Education account (529/IRA/ABLE) | describe + value + statement → Investments box | Q24 |
+| Trusts or future interests | describe + value | Q25 |
+| Intellectual property | describe + value | Q26 |
+| Licenses, franchises, intangibles | describe + value | Q27 |
+| Tax refunds owed to you | value | Q28 |
+| Family support owed to you | value | Q29 |
+| Other money someone owes you | describe + value | Q30 |
+| Insurance with cash value | repeatable card (describe + cash value) + statement → Investments box | Q31 |
+| Inheritance from someone who died | describe + value | Q32 |
+| Legal claims or lawsuits | repeatable card (describe + value); **always-on "must be listed" warning** | Q33–34 |
+| Other financial assets not listed | repeatable card (describe + value) | Q35 |
+
+**Assets documents (sidebar):** Zillow valuation statement; Foreclosure documents (if any); KBB valuation statement; Vehicle title (if any); Vehicle repossession documents (if any); Bank or financial account statements; Investments, retirement, pensions, etc. — each "needed" + N/A. (Removed "Lien-free vehicle title," "Vehicle/asset valuation," and the old "Other account statements.")
 
 ---
 

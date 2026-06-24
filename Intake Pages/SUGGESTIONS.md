@@ -327,6 +327,38 @@ gives a concrete valuation path.
 
 ---
 
+## Round 14 — Assets: Personal/Household + Financial Assets to Schedule A/B (2026-06-24)
+
+**Files:** assets.html, documents.html, FIELD-MAP.md
+
+**What changed:**
+- **Personal and Household Items** (new heading, placed after Vehicles per Sch
+  A/B order) — table rebuilt to the official Part 3 categories (Q6–14) with brief
+  summaries: household goods, electronics, collectibles, sports/hobby, firearms,
+  clothes, jewelry, animals/pets (now a value), and "other" with inline describe.
+  Garage-sale wording.
+- **Financial Assets** (new heading) — replaced the "tap a chip" UI with the
+  full Sch A/B Part 4 (Q16–35) as individual Yes/No questions under "Do you own
+  or have any interest in any of the following:". Symmetrical layout (fixed-width
+  labels so all pills align; long labels wrap). Each Yes reveals a value;
+  describe fields added where the form needs detail (business, bonds, security
+  deposits, education, trusts, IP, licenses, money owed, inheritance, claims,
+  other). Repeatable cards (institution/type/value + statement-upload reminder
+  naming the box) for: bank/financial accounts, bonds/stocks, retirement/pension,
+  annuities, insurance, legal claims, and "other financial assets." Legal-claims
+  "must be listed" warning is always visible.
+- Cash + accounts reworded to item style (dropped "Do you have any…").
+- Upload sidebar: renamed "Other account statements" → "Bank or financial
+  account statements"; added "Investments, retirement, pensions, etc." Page-7
+  summary updated (Assets count 7).
+
+**Rationale:** Mirrors Schedule A/B exactly (Parts 3–4) so the data maps 1:1 to
+the form. Yes/No-with-reveal keeps a long list scannable; repeatable cards handle
+multiple holdings; named upload boxes tell debtors exactly where each statement
+goes and avoid duplicate uploads already provided in Income.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
