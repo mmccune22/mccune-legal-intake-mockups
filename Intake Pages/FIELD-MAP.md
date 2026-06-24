@@ -208,6 +208,10 @@ These are *outputs* the system calculates from data collected elsewhere. They ex
 | Legal claims or lawsuits | repeatable card (describe + value); **always-on "must be listed" warning** | Q33–34 |
 | Other financial assets not listed | repeatable card (describe + value) | Q35 |
 
+**Business Related Property** (Schedule A/B Part 5, Q37–45) — gated: "Do you own or have any interest in any business related property?" → Yes reveals a large description box (unpaid commissions, accounts receivable, office equipment/supplies, machinery, tools/fixtures, inventory, partnership/business interests, other).
+
+**Farm & Commercial Fishing Property** (Schedule A/B Part 6, Q46–52) — gated: "Do you own or have any interest in any farm or commercial fishing related property?" → Yes reveals a large description box (farm animals/livestock, crops, farm/fishing equipment, machinery and implements, other).
+
 **Assets documents (sidebar):** Zillow valuation statement; Foreclosure documents (if any); KBB valuation statement; Vehicle title (if any); Vehicle repossession documents (if any); Bank or financial account statements; Investments, retirement, pensions, etc. — each "needed" + N/A. (Removed "Lien-free vehicle title," "Vehicle/asset valuation," and the old "Other account statements.")
 
 ---

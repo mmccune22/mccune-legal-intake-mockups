@@ -359,6 +359,28 @@ goes and avoid duplicate uploads already provided in Income.
 
 ---
 
+## Round 15 — Assets: Business + Farm/Fishing property (Parts 5–6) (2026-06-24)
+
+**Files:** assets.html, FIELD-MAP.md
+
+**What changed:** Added the final two Schedule A/B sections after Financial
+Assets:
+- **Business Related Property** (Part 5) — single gated Yes/No; Yes reveals a
+  large description box (unpaid commissions, accounts receivable, office
+  equipment/supplies, machinery, tools/fixtures, inventory, partnership/business
+  interests, other).
+- **Farm & Commercial Fishing Property** (Part 6) — single gated Yes/No; Yes
+  reveals a large description box (farm animals/livestock, crops, farm/fishing
+  equipment, machinery and implements, other).
+Both reuse the Financial Assets `.faTg[data-reveal]` wiring. Hyphens removed from
+headings/labels per request.
+
+**Rationale:** Completes Assets coverage of Schedule A/B Parts 1–6. These two are
+rare for consumer debtors, so a single gated question with a free-text box is
+enough — the attorney follows up if Yes.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
