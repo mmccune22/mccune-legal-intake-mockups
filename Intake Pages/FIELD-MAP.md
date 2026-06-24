@@ -169,7 +169,20 @@ These are *outputs* the system calculates from data collected elsewhere. They ex
 
 > **Mortgage balance / monthly payment / HOA are NOT collected here** — they move to **Debts (Schedule D)**. Assets captures the property + value; the mortgage is a secured debt.
 
-**Assets documents (sidebar):** Zillow valuation statement; Foreclosure documents (if any); Other account statements (401k/IRA); Lien-free vehicle title; Vehicle/asset valuation — each "needed" + N/A.
+**Vehicles** — gated: "Do you own or have any interest in any vehicles?" → Yes reveals vehicle card(s), repeatable:
+
+| Intake field | → Form destination | Notes |
+|---|---|---|
+| Year / Make / Model / Mileage | Schedule A/B Pt 2 (vehicles) | |
+| Vehicle purchase date (MM/YYYY) | Schedule A/B Pt 2 | |
+| Estimated value | Schedule A/B Pt 2 (current value) | KBB.com link + upload valuation |
+| Is this vehicle financed or leased? | (context) | Yes → reveals keep + behind questions; No → "upload title" note |
+| → Do you want to keep the vehicle? | (intent / Statement of Intention) | shown when financed |
+| → Are you behind on payments? | (arrears context) | shown when financed; Yes → repossession info-tip (file before repossession) |
+
+> **Vehicle loan balance / payment NOT collected here** — move to **Debts (Schedule D)**, same as the mortgage.
+
+**Assets documents (sidebar):** Zillow valuation statement; Foreclosure documents (if any); KBB valuation statement; Vehicle title (if any); Vehicle repossession documents (if any); Other account statements (401k/IRA) — each "needed" + N/A. (Removed "Lien-free vehicle title" and "Vehicle/asset valuation.")
 
 ---
 

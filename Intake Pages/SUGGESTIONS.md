@@ -301,6 +301,32 @@ link + valuation upload gives a concrete way to establish value.
 
 ---
 
+## Round 13 — Assets: Vehicles rebuild + sidebar docs (2026-06-23)
+
+**Files:** assets.html, documents.html, FIELD-MAP.md
+
+**What changed:**
+- **Vehicles** converted to a gated, repeatable card like Real estate: "Do you
+  own or have any interest in any vehicles?" (…or similar property) → Yes reveals
+  card(s) with ✕ Remove. Fields: year/make/model/mileage, vehicle purchase date
+  (MM/YYYY), estimated value with a clickable KBB.com link + upload note.
+- "Is this vehicle financed or leased?" gates the rest: Yes reveals "Do you want
+  to keep the vehicle?" and "Are you behind on payments?" (Yes → repossession
+  info-tip: file before repossession if you want to keep it). No reveals an
+  "upload the title" note. Loan balance/payment moved to Debts (Schedule D).
+- Foreclosure note reworded to add "and you want to save the house"; repossession
+  note mirrors it ("and you want to keep the vehicle").
+- Asset upload sidebar updated: added KBB valuation statement, Vehicle title (if
+  any), Vehicle repossession documents (if any); removed Lien-free vehicle title
+  and Vehicle/asset valuation. Page-7 summary rebuilt to match (count 6).
+
+**Rationale:** Same asset-vs-debt split as real estate — the vehicle and its
+value belong in Assets (Schedule A/B); the loan is a secured debt (Schedule D).
+Gating keep/repossession on "financed" keeps paid-off vehicles simple. KBB link
+gives a concrete valuation path.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
