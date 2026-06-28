@@ -481,6 +481,28 @@ primary button matches reading order and reduces accidental exits.
 
 ---
 
+## Round 20 — Expenses to Schedule J + saved-state honesty (2026-06-27)
+
+**Files:** expenses.html, all six section pages
+
+**What changed:**
+- **Expenses** rebuilt to mirror Schedule J line-by-line, grouped by the form's
+  structure (Home, Utilities, Living & family, Transportation & insurance, Other
+  obligations) with friendly labels. Filled previously-missing J lines (5, 6d,
+  10, 16, 19, 20); removed demo dollar values. Mortgage/HOA/vehicle-payment rows
+  carry from Debts silently (no "carries from Debts" label).
+- **Saved indicator fix:** the footer "✓ Saved automatically" was always showing
+  before any input. Now hidden until the user types in any field.
+- **End-of-section messages** reworded so they no longer claim "your progress is
+  saved" before the user acts — now frame it as "save and continue," and add
+  reassurance that they can "save and exit and come back later to finish."
+
+**Rationale:** Matching Schedule J makes Expenses map 1:1 to the form like the
+other sections. The saved-state changes remove a misleading "saved" claim — the
+form shouldn't say it saved before the user does anything.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

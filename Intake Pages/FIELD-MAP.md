@@ -255,6 +255,22 @@ Removed the old scattered "Back taxes?" block and "Do you owe child support…" 
 
 ---
 
+## SECTION 5 — Expenses (Schedule J / Form 106J)
+
+`expenses.html`. Rebuilt to mirror Schedule J line-by-line, grouped by the form's structure with friendly labels. Each row is a monthly $ amount.
+
+| Group | Rows | → Schedule J line |
+|---|---|---|
+| Home | Rent/mortgage; additional mortgage/HELOC; HOA dues; home maintenance | J4, J5, (HOA→J4/5), J upkeep |
+| Utilities | Electricity/heat/gas; water/sewer/garbage; phone/cell/internet/cable; other | J6a, J6b, J6c, J6d |
+| Living & family | Food & housekeeping; childcare & education; clothing/laundry; personal care; medical/dental; entertainment; charitable; pet care | J7, J8, J9, J10, J11, J13, J14, (pets) |
+| Transportation & insurance | Transportation; vehicle payments; vehicle/health/life/other insurance | J12, J17, J15 |
+| Other obligations | Taxes; installment/lease; alimony/support paid; support for others; other real property; other | J16, J17, J18, J19, J20, J21 |
+
+> Mortgage / HOA / vehicle-payment amounts **carry over from Debts** (auto-populated), so the debtor isn't re-asked. Carryover is silent (no "carries from Debts" label). Filled the previously-missing J lines (5, 6d, 10, 16, 19, 20).
+
+---
+
 ## SECTION 6 — Statement of Financial Affairs (Form 107)
 
 `financial-affairs.html` mirrors Form 107 exactly: all 26 numbered questions, in official order, grouped under the form's 11 parts. Each is a Yes/No that (when built out) reveals the detail fields for that question. Several overlap with data collected earlier and should be **carried through read-only**, not re-asked.
