@@ -410,6 +410,53 @@ properties/mortgages/HOAs clearly separated.
 
 ---
 
+## Round 17 — Debts: Priority Debts (Schedule E) (2026-06-27)
+
+**Files:** debts.html, FIELD-MAP.md
+
+**What changed:** Added a **Priority Debts** section after Secured Debts with two
+gated, repeatable questions:
+- "Do you owe any domestic support obligations?" (child support, alimony,
+  maintenance) → owed to whom, total owed (if behind), monthly amount + a
+  "Domestic support documents" upload reminder.
+- "Do you owe any back taxes?" (IRS or state) → taxing authority, tax year(s),
+  amount owed + a "Tax notices" upload reminder.
+Removed the old scattered "Back taxes?" block and "Do you owe child support…"
+yes/no (consolidated here). Added "Domestic support documents" and "Tax notices"
+upload boxes. Added the missing `.fa-q` style to debts.html (spacing was off);
+DSO question label sized to content so it stays on one line.
+
+**Rationale:** Domestic support and taxes are the common priority (Schedule E)
+debts and get special treatment, so they deserve their own section separate from
+general unsecured debt.
+
+---
+
+## Round 18 — Debts: Student Loans, Unsecured, Co-signers (2026-06-27)
+
+**Files:** debts.html, FIELD-MAP.md
+
+**What changed:**
+- **Student Loans** section: explanatory subtitle (presumed non-dischargeable,
+  sometimes dischargeable, talk to attorney); gated repeatable card + "Student
+  loan statements" upload box. Removed the old lump "Student loans" field.
+- **Unsecured Debts**: collapsed category totals into a single "Estimated total
+  unsecured debt" field with a prominent info-tip — credit reports pulled but
+  upload statements; **medical bills no longer show on credit reports** so upload
+  every one; also upload collection/attorney letters. New required "Unsecured
+  debt statements & collection / attorney notices" box; removed the old generic
+  "Statements for all debts" and "Attorney / collector letters" boxes.
+- Moved "Creditors without a statement" directly under Unsecured.
+- **Co-signers**: "Has anyone co-signed?" → info-tip (co-signer stays liable
+  after your bankruptcy) + repeatable card (name, which debt, mailing address).
+  Kept the two business yes/no questions; wrapped the three wrap-up questions in
+  a card to match the Creditors section indentation; aligned the Yes/No pills.
+
+**Rationale:** Rounds out Debts across Schedules D/E/F (plus H co-signers).
+Student loans and the medical-bill upload point are practice-critical nuances.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

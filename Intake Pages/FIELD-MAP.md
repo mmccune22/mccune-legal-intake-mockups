@@ -232,6 +232,25 @@ These are *outputs* the system calculates from data collected elsewhere. They ex
 
 **Secured debt documents (sidebar, order):** Mortgage statements; HOA statements; Other secured debt statements; Vehicle loan / lease statements — each names its box in the card's upload reminder.
 
+**Priority Debts (Schedule E)** — two gated questions after Secured:
+
+| Item | Reveal | Form |
+|---|---|---|
+| Do you owe any domestic support obligations? (child support, alimony, maintenance) | repeatable: owed to whom, total owed (if behind), monthly amount + "Domestic support documents" upload reminder | Schedule E (DSO) |
+| Do you owe any back taxes? (IRS or state) | repeatable: taxing authority, tax year(s), amount owed + "Tax notices" upload reminder | Schedule E (taxes) |
+
+Removed the old scattered "Back taxes?" block and "Do you owe child support…" yes/no (consolidated here). **Priority debt documents (sidebar):** Domestic support documents; Tax notices.
+
+**Student Loans** — own section (not priority, but special): explanatory subtitle that they are presumed non-dischargeable but sometimes dischargeable. Gated → repeatable card (lender/servicer, balance, monthly payment) + "Student loan statements" upload box.
+
+**Unsecured Debts (Schedule F)** — single "Estimated total unsecured debt" field + a prominent info-tip: credit reports will be pulled, but upload most recent statements; **medical bills no longer appear on credit reports** so every medical bill must be uploaded; also upload collection/attorney letters. Required upload box "Unsecured debt statements & collection / attorney notices." Followed by "Creditors without a statement" (repeatable: name, amount, mailing address) for creditors not on the credit report.
+
+**Co-signers (Schedule H codebtors)** — "Has anyone co-signed on any of your debts?" → info-tip (co-signer stays legally responsible after the debtor's bankruptcy) + repeatable card (co-signer name, which debt, mailing address). Plus two yes/no: business debt, and >50% business debt (Ch. 7 eligibility signal).
+
+> Removed the old generic "Statements for all debts" and "Attorney / collector letters" upload boxes — folded into the unsecured box.
+
+**Debt section order:** Secured → Priority → Student Loans → Unsecured → Creditors without a statement → co-signer / business yes/no.
+
 ---
 
 ## SECTION 6 — Statement of Financial Affairs (Form 107)
