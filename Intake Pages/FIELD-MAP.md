@@ -277,8 +277,8 @@ Removed the old scattered "Back taxes?" block and "Do you owe child support…" 
 
 | SOFA Part | Questions | → Form 107 | Overlap / carry-through |
 |---|---|---|---|
-| Pt 1 — Marital status & residence | Q1 (marital status), Q2 (addresses, last 3 yrs) | 107 Pt 1 | Q1 carries from Personal Info marital status (read-only). **Q2 is the source of truth for address history → venue + exemption derivation** |
-| Pt 2 — Income | Q3 (income this/last 2 yrs), Q4 (other income) | 107 Pt 2 | Q4 carries from Income section (read-only) |
+| Pt 1 — Marital status & residence | Q1 (marital status), Q2 (addresses, last 3 yrs) | 107 Pt 1 | Q1 **pre-populated (editable)** from Personal Info marital status with a "carried over — change if needed" note. **Q2 is the source of truth for address history → venue + exemption derivation** |
+| Pt 2 — Income | Q3 (income this/last 2 yrs), Q4 (other income) | 107 Pt 2 | Q4 **pre-populated (editable)** from Income section with a "carried over — change if needed" note |
 | Pt 3 — Creditor payments | Q5, Q6, Q7 (payments, insiders, advantage) | 107 Pt 3 | Insider payments cross-ref Debts |
 | Pt 4 — Legal actions | Q8 (suits), Q9 (repossessions/garnishments), Q10 (setoffs) | 107 Pt 4 | Manual |
 | Pt 5 — Gifts & contributions | Q11 (gifts), Q12 (charitable) | 107 Pt 5 | Manual |

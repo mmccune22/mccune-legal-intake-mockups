@@ -503,6 +503,22 @@ form shouldn't say it saved before the user does anything.
 
 ---
 
+## Round 21 — SOFA carry-throughs are editable pre-fills (2026-06-27)
+
+**Files:** financial-affairs.html, FIELD-MAP.md
+
+**What changed:** The two read-only carry-through boxes on the SOFA (Q1 marital
+status from Personal Info; Q4 income from Income) were locked grey panels. Now
+they are normal editable fields **pre-populated** with the carried value, plus a
+hint: "We carried this over from your [section] — if it is not correct, you can
+change it here." Q1 is an editable dropdown; Q4 an editable amount field.
+
+**Rationale:** A locked box that shows a value the debtor can't fix is
+frustrating if the carryover is wrong. Pre-fill + editable respects the
+"ask once" intent while letting the debtor correct it.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
