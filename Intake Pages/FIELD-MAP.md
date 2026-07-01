@@ -289,7 +289,13 @@ Removed the old scattered "Back taxes?" block and "Do you owe child support…" 
 | Pt 10 — Property held for others | Q22 (property of others), Q23 (environmental) | 107 Pt 10 | Manual |
 | Pt 11 — Business | Q24, Q25 (businesses), Q26 (bookkeepers) | 107 Pt 11 | Manual |
 
-> SOFA detail fields per question are **to be built**. When built, Q2 detail (address history) must be wired to the venue/exemption derivation above.
+**On-screen numbering vs. Form 107:** the `<span class="qn">` numbers on our page are an **internal debtor-facing sequence**, not the official Form 107 line numbers. Order/labels are chosen for clarity; the crosswalk to the real form lines is this field map (dev maps behind the scenes).
+
+**SOFA Q4/Q5 (income), simplified.** Rather than a hand-entered 3-year × Debtor 1/Debtor 2 income grid, Q4 is a Yes/No ("did you have job/business income in the last 3 years?") that reveals type checkboxes (wages vs. self-employment/business) + a note that **exact annual figures come from the uploaded tax returns** (attorney completes the grid from those). Q5 (other income — alimony, SS, unemployment, rental, lawsuit, gambling, etc.) stays a Yes/No → repeatable source card, since that income often isn't on the returns and shouldn't be missed. Debtor 2 column gates on joint filing.
+
+**SOFA Q6 (Form 107 Part 5 — "primarily consumer debts?") is DERIVED, not asked on the SOFA page.** It is computed from the **Debts business-debt branch**: if >50% of debt is business/self-employment (non-consumer), the filer is non-consumer. Don't double-ask; derive the Form 107 Q6 checkbox from the Debts answers.
+
+> SOFA detail fields are **built** (all 26 reveal Form 107–matched follow-ups; repeatable cards where applicable). Q2 address detail (Debtor 1 + conditional Debtor 2, structured street/city/state/ZIP + From/To) is the source of truth for venue/exemption derivation.
 
 ---
 

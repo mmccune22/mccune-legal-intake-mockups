@@ -540,6 +540,34 @@ line. First-pass field choices — up for Matt's review question-by-question.
 
 ---
 
+## Round 23 — SOFA review pass + Assets/Debts joint language (2026-06-30)
+
+**Files:** financial-affairs.html, assets.html, debts.html, FIELD-MAP.md
+
+**What changed:**
+- **Assets & Debts** intros: added joint-filing instruction (list assets/debts
+  owned by you individually, by your spouse individually, and jointly).
+- **SOFA Q1** marital status simplified to Married / Not married (per the form).
+- **SOFA Q2** rebuilt to the form's two-column structure: structured Debtor 1
+  prior address (street/city/state dropdown/ZIP + From/To on one line), and a
+  Debtor 2 (spouse) column that appears only when filing jointly, with a "Same
+  as your prior address" checkbox. Prior-address note is now a lightbulb
+  info-tip. Repeatable.
+- **SOFA Q4 (income)** simplified: Yes/No → wages vs. self-employment/business
+  type checkboxes + a note that exact annual figures come from the uploaded tax
+  returns (no hand-entered 3-year grid). Q5 (other income) left as the
+  repeatable source card.
+- **SOFA Q6 (primarily consumer debts)** confirmed derived from the Debts
+  business-debt branch — not asked on the SOFA. Documented in FIELD-MAP, along
+  with the note that on-screen SOFA numbers are internal (field map is the
+  crosswalk to Form 107 lines).
+
+**Rationale:** Lean on documents/derivation instead of asking debtors to
+hand-calculate or re-answer. Q2 matches the form's Debtor 1/Debtor 2 layout for
+clean mapping.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
