@@ -519,6 +519,27 @@ frustrating if the carryover is wrong. Pre-fill + editable respects the
 
 ---
 
+## Round 22 — SOFA follow-up fields built out (2026-06-28)
+
+**Files:** financial-affairs.html, FIELD-MAP.md
+
+**What changed:** Built the "Yes" follow-up inputs for all 26 SOFA toggle
+questions (Q2–Q3, Q5–Q28). Each reveals a Form 107–matched set of fields as a
+repeatable card (add/remove) where multiple entries are likely — e.g. Q6
+creditor/paid/still-owed/dates; Q9 case title/court/number/status; Q13
+recipient/relationship/describe/value/date; Q20 institution/type/last-4/
+balance/date; Q27 business name/type/role/EIN/dates. Toggles now start blank
+(no pre-set No). Q2/Q9/Q10 kept their original upload notes and gained the
+structured card. Q2 prior-address note converted to a lightbulb info-tip.
+Intro subtitle + video box reworded ("answer completely and accurately so your
+lawyer can properly advise you; for some answers we'll ask for court
+paperwork").
+
+**Rationale:** Completes the SOFA so each answer maps to the actual Form 107
+line. First-pass field choices — up for Matt's review question-by-question.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
