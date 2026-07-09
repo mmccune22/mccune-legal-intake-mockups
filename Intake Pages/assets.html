@@ -149,12 +149,20 @@ textarea.inp{height:auto;min-height:64px;padding:10px 12px;resize:vertical;}
 .inp:focus{outline:none;border-color:var(--brand-accent);box-shadow:0 0 0 3px var(--brand-soft);}
 select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23667279' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;color:var(--faint);}
 .hint{font-size:12.5px;color:var(--muted);}
-.asset-address-tools,.asset-zestimate-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.address-autocomplete{position:relative;width:100%;}
+.address-autocomplete input{width:100%;}
+.address-autocomplete-menu{background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 14px 30px rgba(31,42,46,.16);display:grid;gap:2px;left:0;max-height:220px;overflow-y:auto;padding:4px;position:absolute;right:0;top:calc(100% + 4px);z-index:40;}
+.address-autocomplete-option{background:transparent;border:0;border-radius:6px;color:var(--ink);cursor:pointer;display:grid;gap:2px;min-height:46px;padding:8px 10px;text-align:left;font-family:var(--font);}
+.address-autocomplete-option:hover,.address-autocomplete-option:focus-visible{background:var(--brand-soft);}
+.address-autocomplete-option strong{font-size:13px;font-weight:700;line-height:1.2;}
+.address-autocomplete-option span,.address-autocomplete-status{color:var(--muted);font-size:12px;font-weight:600;line-height:1.25;}
+.address-autocomplete-status{display:block;margin-top:5px;}
+.asset-zestimate-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px;}
 .asset-helper-button{height:34px;border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff;color:var(--brand-primary);font-family:var(--font);font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:7px;padding:0 12px;cursor:pointer;text-decoration:none;}
 .asset-helper-button:hover{border-color:var(--brand-accent);background:var(--brand-soft);}
 .asset-helper-button:disabled{cursor:not-allowed;color:var(--faint);background:#f7f7f5;border-color:var(--line);}
 .asset-helper-button svg{width:15px;height:15px;flex:0 0 auto;}
-.asset-location-status,.asset-zestimate-status{font-size:12.5px;color:var(--muted);line-height:1.4;}
+.asset-zestimate-status{font-size:12.5px;color:var(--muted);line-height:1.4;}
 .pre{display:flex;}
 .pre .lead{height:42px;display:flex;align-items:center;padding:0 12px;background:var(--brand-soft);border:1px solid var(--line);border-right:0;border-radius:var(--radius-sm) 0 0 var(--radius-sm);color:var(--muted);font-size:14px;}
 .pre .inp{border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
@@ -746,6 +754,8 @@ table.exp td:last-child{width:140px;}
 <script>(function(){var fl=document.getElementById("savedFlag");if(!fl)return;function show(){fl.style.visibility="visible";document.removeEventListener("input",show);}document.addEventListener("input",show);})();</script>
 <script>
 (function(){
+  var ADDRESS_SUGGEST_ENDPOINT='https://intake.bkfastlane.com/api/address-suggest';
+  var STATE_CODE_NAMES={AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
   function zillowAddressSearchSlug(address){
     return address
       .replace(/#/g,' Unit ')
@@ -809,17 +819,185 @@ table.exp td:last-child{width:140px;}
     button.title=address ? 'Search Zillow for '+address : 'Enter a property address first';
     if(status) status.textContent=address ? 'Searches Zillow using the property address above.' : 'Enter the property address before opening Zillow.';
   }
+  function autocompleteParts(card){
+    return {
+      wrapper:card.querySelector('.address-autocomplete'),
+      menu:card.querySelector('.address-autocomplete-menu'),
+      status:card.querySelector('.address-autocomplete-status')
+    };
+  }
+  function setAutocompleteStatus(card,message){
+    var status=autocompleteParts(card).status;
+    if(status) status.textContent=message || '';
+  }
+  function closeAutocomplete(card){
+    var parts=autocompleteParts(card);
+    if(parts.menu){
+      parts.menu.hidden=true;
+      parts.menu.innerHTML='';
+    }
+  }
+  function normalizeSuggestion(value){
+    if(!value || typeof value!=='object') return null;
+    var street=String(value.streetAddress || '').trim();
+    var formatted=String(value.formatted || '').trim();
+    if(!street || !formatted) return null;
+    return {
+      city:String(value.city || '').trim(),
+      formatted:formatted,
+      id:String(value.id || formatted),
+      state:String(value.state || '').trim(),
+      stateCode:String(value.stateCode || '').trim().toUpperCase(),
+      streetAddress:street,
+      zipCode:String(value.zipCode || '').trim()
+    };
+  }
+  function loadAddressSuggestions(query,context){
+    var trimmed=(query || '').trim();
+    if(trimmed.length<5) return Promise.resolve({configured:true,suggestions:[]});
+    var params=new URLSearchParams({q:trimmed});
+    if(context.city) params.set('city',context.city);
+    if(context.state) params.set('state',context.state);
+    if(context.zipCode) params.set('zip',context.zipCode);
+    return fetch(ADDRESS_SUGGEST_ENDPOINT+'?'+params.toString(),{headers:{Accept:'application/json'}})
+      .then(function(response){
+        return response.json().catch(function(){return null;}).then(function(payload){
+          if(!payload || typeof payload!=='object') throw new Error('Invalid address suggestions response');
+          var suggestions=Array.isArray(payload.suggestions) ? payload.suggestions.map(normalizeSuggestion).filter(Boolean) : [];
+          return {
+            configured:payload.configured!==false,
+            error:typeof payload.error==='string' ? payload.error : '',
+            suggestions:suggestions
+          };
+        });
+      });
+  }
+  function renderSuggestions(card,suggestions){
+    var parts=autocompleteParts(card);
+    if(!parts.menu) return;
+    card.__addressSuggestions=suggestions;
+    parts.menu.innerHTML='';
+    if(!suggestions.length){
+      parts.menu.hidden=true;
+      return;
+    }
+    suggestions.forEach(function(suggestion,index){
+      var option=document.createElement('button');
+      option.className='address-autocomplete-option';
+      option.type='button';
+      option.dataset.addressSuggestionIndex=String(index);
+      option.innerHTML='<strong></strong><span></span>';
+      option.querySelector('strong').textContent=suggestion.streetAddress;
+      option.querySelector('span').textContent=[suggestion.city,suggestion.stateCode,suggestion.zipCode].filter(Boolean).join(', ');
+      parts.menu.appendChild(option);
+    });
+    parts.menu.hidden=false;
+  }
+  function setStateSelectValue(select,stateCode,stateName){
+    if(!select) return;
+    var wantedName=(stateName || STATE_CODE_NAMES[String(stateCode || '').toUpperCase()] || '').toLowerCase();
+    var wantedCode=String(stateCode || '').toUpperCase();
+    for(var i=0;i<select.options.length;i++){
+      var option=select.options[i];
+      if(String(option.value || '').toUpperCase()===wantedCode || option.text.toLowerCase()===wantedName){
+        select.selectedIndex=i;
+        return;
+      }
+    }
+  }
+  function selectAddressSuggestion(card,suggestion){
+    var controls=realEstateControls(card);
+    if(controls.street) controls.street.value=suggestion.streetAddress;
+    if(controls.city) controls.city.value=suggestion.city;
+    if(controls.zip) controls.zip.value=suggestion.zipCode;
+    setStateSelectValue(controls.state,suggestion.stateCode,suggestion.state);
+    card.__skipAddressQuery=suggestion.streetAddress;
+    closeAutocomplete(card);
+    setAutocompleteStatus(card,'');
+    updateZillowButton(card);
+    if(controls.street) controls.street.dispatchEvent(new Event('input',{bubbles:true}));
+    [controls.city,controls.state,controls.zip].forEach(function(control){
+      if(control) control.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+  }
+  function scheduleAddressAutocomplete(card){
+    var controls=realEstateControls(card);
+    var query=selectedValue(controls.street);
+    if(card.__skipAddressQuery===query){
+      card.__skipAddressQuery='';
+      closeAutocomplete(card);
+      setAutocompleteStatus(card,'');
+      return;
+    }
+    clearTimeout(card.__addressAutocompleteTimer);
+    if(query.trim().length<5){
+      closeAutocomplete(card);
+      setAutocompleteStatus(card,'');
+      return;
+    }
+    var requestId=(card.__addressAutocompleteRequestId || 0)+1;
+    card.__addressAutocompleteRequestId=requestId;
+    card.__addressAutocompleteTimer=setTimeout(function(){
+      setAutocompleteStatus(card,'Finding addresses...');
+      loadAddressSuggestions(query,{
+        city:selectedValue(controls.city),
+        state:selectedValue(controls.state),
+        zipCode:selectedValue(controls.zip)
+      }).then(function(payload){
+        if(card.__addressAutocompleteRequestId!==requestId) return;
+        if(!payload.configured){
+          closeAutocomplete(card);
+          setAutocompleteStatus(card,payload.error || 'Address suggestions need setup.');
+          return;
+        }
+        renderSuggestions(card,payload.suggestions);
+        setAutocompleteStatus(card,payload.suggestions.length ? '' : 'No address matches found.');
+      }).catch(function(){
+        if(card.__addressAutocompleteRequestId!==requestId) return;
+        closeAutocomplete(card);
+        setAutocompleteStatus(card,'Address suggestions are unavailable. You can still type the address manually.');
+      });
+    },400);
+  }
+  function ensureAddressAutocomplete(card,streetInput){
+    var wrapper=streetInput.closest('.address-autocomplete');
+    if(!wrapper){
+      wrapper=document.createElement('div');
+      wrapper.className='address-autocomplete';
+      streetInput.parentNode.insertBefore(wrapper,streetInput);
+      wrapper.appendChild(streetInput);
+    }
+    var menu=wrapper.querySelector('.address-autocomplete-menu');
+    if(!menu){
+      menu=document.createElement('div');
+      menu.className='address-autocomplete-menu';
+      menu.setAttribute('role','listbox');
+      menu.hidden=true;
+      wrapper.appendChild(menu);
+    }
+    var status=wrapper.querySelector('.address-autocomplete-status');
+    if(!status){
+      status=document.createElement('small');
+      status.className='address-autocomplete-status';
+      status.setAttribute('aria-live','polite');
+      wrapper.appendChild(status);
+    }else{
+      status.textContent='';
+    }
+    streetInput.setAttribute('aria-autocomplete','list');
+    streetInput.setAttribute('role','combobox');
+    streetInput.setAttribute('autocomplete','off');
+    streetInput.setAttribute('inputmode','search');
+  }
   function enhanceCard(card){
     if(!card || card.__assetEstimateToolsReady) return;
     card.__assetEstimateToolsReady=true;
     var controls=realEstateControls(card);
-    var existingLocationStatus=card.querySelector('.asset-location-status');
-    if(existingLocationStatus) existingLocationStatus.textContent='';
-    if(controls.street && !card.querySelector('.asset-address-tools')){
-      var tools=document.createElement('div');
-      tools.className='asset-address-tools';
-      tools.innerHTML='<button class="asset-helper-button asset-location-button" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.4 7-12a7 7 0 0 0-14 0c0 6.6 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Use current location</button><span class="asset-location-status" aria-live="polite"></span>';
-      controls.street.insertAdjacentElement('afterend',tools);
+    if(controls.state && !selectedValue(controls.street) && !selectedValue(controls.city) && !selectedValue(controls.zip)){
+      controls.state.selectedIndex=0;
+    }
+    if(controls.street){
+      ensureAddressAutocomplete(card,controls.street);
     }
     if(controls.valueField && !card.querySelector('.asset-zestimate-row')){
       var row=document.createElement('div');
@@ -834,32 +1012,12 @@ table.exp td:last-child{width:140px;}
   function enhanceAll(){
     document.querySelectorAll('#realEstateBlock .reitem').forEach(enhanceCard);
   }
-  function setLocationStatus(card,text){
-    var status=card && card.querySelector('.asset-location-status');
-    if(status) status.textContent=text;
-  }
   document.addEventListener('click',function(e){
-    var locationButton=e.target.closest('.asset-location-button');
-    if(locationButton){
-      var locationCard=locationButton.closest('.reitem');
-      if(!navigator.geolocation){
-        setLocationStatus(locationCard,'Location is not available in this browser.');
-        return;
-      }
-      locationButton.disabled=true;
-      setLocationStatus(locationCard,'Asking for permission...');
-      navigator.geolocation.getCurrentPosition(function(position){
-        var lat=position.coords.latitude.toFixed(5);
-        var lng=position.coords.longitude.toFixed(5);
-        setLocationStatus(locationCard,'Location captured: '+lat+', '+lng+'. Confirm or type the full property address before using Zillow.');
-        locationButton.disabled=false;
-      },function(error){
-        var message='Location was not allowed.';
-        if(error && error.code===error.POSITION_UNAVAILABLE) message='Location is unavailable right now.';
-        if(error && error.code===error.TIMEOUT) message='Location request timed out.';
-        setLocationStatus(locationCard,message);
-        locationButton.disabled=false;
-      },{enableHighAccuracy:true,maximumAge:60000,timeout:10000});
+    var suggestionButton=e.target.closest('.address-autocomplete-option');
+    if(suggestionButton){
+      var suggestionCard=suggestionButton.closest('.reitem');
+      var suggestion=(suggestionCard.__addressSuggestions || [])[Number(suggestionButton.dataset.addressSuggestionIndex)];
+      if(suggestion) selectAddressSuggestion(suggestionCard,suggestion);
       return;
     }
     var zillowButton=e.target.closest('.asset-zestimate-button');
@@ -872,11 +1030,29 @@ table.exp td:last-child{width:140px;}
   });
   document.addEventListener('input',function(e){
     var card=e.target.closest && e.target.closest('#realEstateBlock .reitem');
-    if(card) updateZillowButton(card);
+    if(card){
+      updateZillowButton(card);
+      if(e.target===realEstateControls(card).street) scheduleAddressAutocomplete(card);
+    }
   });
   document.addEventListener('change',function(e){
     var card=e.target.closest && e.target.closest('#realEstateBlock .reitem');
-    if(card) updateZillowButton(card);
+    if(card){
+      updateZillowButton(card);
+      if(e.target!==realEstateControls(card).street) scheduleAddressAutocomplete(card);
+    }
+  });
+  document.addEventListener('focusin',function(e){
+    var card=e.target.closest && e.target.closest('#realEstateBlock .reitem');
+    if(card && e.target===realEstateControls(card).street && card.__addressSuggestions && card.__addressSuggestions.length){
+      renderSuggestions(card,card.__addressSuggestions);
+    }
+  });
+  document.addEventListener('focusout',function(e){
+    var card=e.target.closest && e.target.closest('#realEstateBlock .reitem');
+    if(card && e.target===realEstateControls(card).street){
+      setTimeout(function(){ closeAutocomplete(card); },150);
+    }
   });
   var block=document.getElementById('realEstateBlock');
   if(block && window.MutationObserver){
