@@ -149,6 +149,12 @@ textarea.inp{height:auto;min-height:64px;padding:10px 12px;resize:vertical;}
 .inp:focus{outline:none;border-color:var(--brand-accent);box-shadow:0 0 0 3px var(--brand-soft);}
 select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23667279' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;color:var(--faint);}
 .hint{font-size:12.5px;color:var(--muted);}
+.asset-address-tools,.asset-zestimate-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.asset-helper-button{height:34px;border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff;color:var(--brand-primary);font-family:var(--font);font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:7px;padding:0 12px;cursor:pointer;text-decoration:none;}
+.asset-helper-button:hover{border-color:var(--brand-accent);background:var(--brand-soft);}
+.asset-helper-button:disabled{cursor:not-allowed;color:var(--faint);background:#f7f7f5;border-color:var(--line);}
+.asset-helper-button svg{width:15px;height:15px;flex:0 0 auto;}
+.asset-location-status,.asset-zestimate-status{font-size:12.5px;color:var(--muted);line-height:1.4;}
 .pre{display:flex;}
 .pre .lead{height:42px;display:flex;align-items:center;padding:0 12px;background:var(--brand-soft);border:1px solid var(--line);border-right:0;border-radius:var(--radius-sm) 0 0 var(--radius-sm);color:var(--muted);font-size:14px;}
 .pre .inp{border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
@@ -738,6 +744,148 @@ table.exp td:last-child{width:140px;}
   saveCarryover();
 })();</script>
 <script>(function(){var fl=document.getElementById("savedFlag");if(!fl)return;function show(){fl.style.visibility="visible";document.removeEventListener("input",show);}document.addEventListener("input",show);})();</script>
+<script>
+(function(){
+  function zillowAddressSearchSlug(address){
+    return address
+      .replace(/#/g,' Unit ')
+      .replace(/[^A-Za-z0-9,.\s-]/g,' ')
+      .replace(/\s+/g,'-')
+      .replace(/-+/g,'-')
+      .replace(/^-|-$/g,'');
+  }
+  function zillowHomesSearchUrl(address){
+    var slug=zillowAddressSearchSlug((address||'').trim());
+    return slug ? 'https://www.zillow.com/homes/'+encodeURI(slug)+'_rb/' : 'https://www.zillow.com/homes/';
+  }
+  function fieldByLabel(card,needle){
+    var fields=card.querySelectorAll('.field');
+    needle=needle.toLowerCase();
+    for(var i=0;i<fields.length;i++){
+      var label=fields[i].querySelector('label');
+      if(label && label.textContent.toLowerCase().indexOf(needle)>=0) return fields[i];
+    }
+    return null;
+  }
+  function firstControl(field){
+    return field ? field.querySelector('input,select,textarea') : null;
+  }
+  function realEstateControls(card){
+    return {
+      street:firstControl(fieldByLabel(card,'property address')),
+      city:firstControl(fieldByLabel(card,'city')),
+      state:firstControl(fieldByLabel(card,'state')),
+      zip:firstControl(fieldByLabel(card,'zip code')),
+      valueField:fieldByLabel(card,'estimated value')
+    };
+  }
+  function selectedValue(control){
+    if(!control) return '';
+    if(control.tagName && control.tagName.toLowerCase()==='select'){
+      var option=control.options[control.selectedIndex];
+      var value=(control.value || '').trim();
+      if(value) return value;
+      return control.selectedIndex>0 ? ((option && option.text) || '').trim() : '';
+    }
+    return (control.value || '').trim();
+  }
+  function propertyAddress(card){
+    var controls=realEstateControls(card);
+    return [
+      selectedValue(controls.street),
+      [selectedValue(controls.city),selectedValue(controls.state)].filter(Boolean).join(', '),
+      selectedValue(controls.zip)
+    ].filter(Boolean).join(' ');
+  }
+  function updateZillowButton(card){
+    var button=card.querySelector('.asset-zestimate-button');
+    var status=card.querySelector('.asset-zestimate-status');
+    if(!button) return;
+    var controls=realEstateControls(card);
+    var street=selectedValue(controls.street);
+    var address=street ? propertyAddress(card) : '';
+    button.disabled=!address;
+    button.dataset.url=zillowHomesSearchUrl(address);
+    button.title=address ? 'Search Zillow for '+address : 'Enter a property address first';
+    if(status) status.textContent=address ? 'Searches Zillow using the property address above.' : 'Enter the property address before opening Zillow.';
+  }
+  function enhanceCard(card){
+    if(!card || card.__assetEstimateToolsReady) return;
+    card.__assetEstimateToolsReady=true;
+    var controls=realEstateControls(card);
+    var existingLocationStatus=card.querySelector('.asset-location-status');
+    if(existingLocationStatus) existingLocationStatus.textContent='';
+    if(controls.street && !card.querySelector('.asset-address-tools')){
+      var tools=document.createElement('div');
+      tools.className='asset-address-tools';
+      tools.innerHTML='<button class="asset-helper-button asset-location-button" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.4 7-12a7 7 0 0 0-14 0c0 6.6 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Use current location</button><span class="asset-location-status" aria-live="polite"></span>';
+      controls.street.insertAdjacentElement('afterend',tools);
+    }
+    if(controls.valueField && !card.querySelector('.asset-zestimate-row')){
+      var row=document.createElement('div');
+      row.className='asset-zestimate-row';
+      row.innerHTML='<button class="asset-helper-button asset-zestimate-button" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Get Zestimate</button><span class="asset-zestimate-status" aria-live="polite"></span>';
+      var hint=controls.valueField.querySelector('.hint');
+      if(hint) hint.insertAdjacentElement('afterend',row);
+      else controls.valueField.appendChild(row);
+    }
+    updateZillowButton(card);
+  }
+  function enhanceAll(){
+    document.querySelectorAll('#realEstateBlock .reitem').forEach(enhanceCard);
+  }
+  function setLocationStatus(card,text){
+    var status=card && card.querySelector('.asset-location-status');
+    if(status) status.textContent=text;
+  }
+  document.addEventListener('click',function(e){
+    var locationButton=e.target.closest('.asset-location-button');
+    if(locationButton){
+      var locationCard=locationButton.closest('.reitem');
+      if(!navigator.geolocation){
+        setLocationStatus(locationCard,'Location is not available in this browser.');
+        return;
+      }
+      locationButton.disabled=true;
+      setLocationStatus(locationCard,'Asking for permission...');
+      navigator.geolocation.getCurrentPosition(function(position){
+        var lat=position.coords.latitude.toFixed(5);
+        var lng=position.coords.longitude.toFixed(5);
+        setLocationStatus(locationCard,'Location captured: '+lat+', '+lng+'. Confirm or type the full property address before using Zillow.');
+        locationButton.disabled=false;
+      },function(error){
+        var message='Location was not allowed.';
+        if(error && error.code===error.POSITION_UNAVAILABLE) message='Location is unavailable right now.';
+        if(error && error.code===error.TIMEOUT) message='Location request timed out.';
+        setLocationStatus(locationCard,message);
+        locationButton.disabled=false;
+      },{enableHighAccuracy:true,maximumAge:60000,timeout:10000});
+      return;
+    }
+    var zillowButton=e.target.closest('.asset-zestimate-button');
+    if(zillowButton && !zillowButton.disabled){
+      window.open(zillowButton.dataset.url || 'https://www.zillow.com/homes/','_blank','noopener,noreferrer');
+    }
+    if(e.target.closest('#addRE')){
+      enhanceAll();
+    }
+  });
+  document.addEventListener('input',function(e){
+    var card=e.target.closest && e.target.closest('#realEstateBlock .reitem');
+    if(card) updateZillowButton(card);
+  });
+  document.addEventListener('change',function(e){
+    var card=e.target.closest && e.target.closest('#realEstateBlock .reitem');
+    if(card) updateZillowButton(card);
+  });
+  var block=document.getElementById('realEstateBlock');
+  if(block && window.MutationObserver){
+    new MutationObserver(function(){ enhanceAll(); setTimeout(enhanceAll,0); }).observe(block,{childList:true,subtree:true});
+  }
+  enhanceAll();
+  setTimeout(enhanceAll,150);
+})();
+</script>
 <script>
 /* DOC-LOGIC trigger gating (mockup):
    zillow_valuation <- real estate = Yes
