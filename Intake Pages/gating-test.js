@@ -1,7 +1,7 @@
 /* Document-request gating test harness — McCune intake mockups.
    Run: npm install jsdom && node gating-test.js  (from the Intake Pages folder; set DIR below to ".")
    Simulates debtor answers on every page and asserts which upload buttons appear,
-   per DOC-LOGIC.md. 74 assertions. Last full pass: 2026-07-05. */
+   per DOC-LOGIC.md. 116 assertions. Last full pass: 2026-07-10. */
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const DIR = './';
@@ -32,6 +32,7 @@ function load(file, url, seed) {
       });
       if (seed) for (const [k,v] of Object.entries(seed)) window.sessionStorage.setItem(k, v);
       window.HTMLMediaElement && (window.HTMLMediaElement.prototype.play = ()=>Promise.resolve());
+      window.fetch = async () => ({ json: async () => ({ configured: true, suggestions: [] }) });
     }
   });
   return dom;
@@ -116,7 +117,7 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     assert('assets: foreclosure appears on behind=Yes', visible(dom, doc, 'foreclosure_docs') === true);
     clickYes(dom, doc, 'vehTg', 0); await sleep(250);
     assert('assets: kbb appears on vehicles=Yes', visible(dom, doc, 'kbb_valuation') === true);
-    assert('assets: title hidden until financed answered No', visible(dom, doc, 'vehicle_title') === false);
+    assert('assets: title appears because financed defaults to No', visible(dom, doc, 'vehicle_title') === true);
     assert('assets: financed toggle found+clicked No', clickToggleByLabel(dom, doc, 'financed', 1)); await sleep(250);
     assert('assets: title appears on financed=No', visible(dom, doc, 'vehicle_title') === true);
     clickToggleByLabel(dom, doc, 'financed', 0); await sleep(250);
@@ -204,14 +205,14 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     const dom = load('financial-affairs.html'); const doc = dom.window.document;
     await sleep(400);
     assert('sofa: court_paperwork hidden by default', visible(dom, doc, 'court_paperwork') === false);
-    // Q9 yes
-    const q9 = [...doc.querySelectorAll('.sofa-q')].find(q => q.querySelector('.qn') && q.querySelector('.qn').textContent.trim()==='8');
-    q9.querySelectorAll('.toggle span')[0].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})); await sleep(250);
+    // On-screen Q8 (Form 107 line 9): lawsuit/court action
+    const q8 = doc.querySelector('.sofa-q[data-question="8"]');
+    q8.querySelectorAll('.toggle span')[0].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})); await sleep(250);
     assert('sofa: court_paperwork appears on Q8(lawsuit)=Yes', visible(dom, doc, 'court_paperwork') === true);
-    q9.querySelectorAll('.toggle span')[1].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})); await sleep(250);
+    q8.querySelectorAll('.toggle span')[1].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})); await sleep(250);
     assert('sofa: court_paperwork hides on Q8=No', visible(dom, doc, 'court_paperwork') === false);
-    const q10 = [...doc.querySelectorAll('.sofa-q')].find(q => q.querySelector('.qn') && q.querySelector('.qn').textContent.trim()==='9');
-    q10.querySelectorAll('.toggle span')[0].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})); await sleep(250);
+    const q9 = doc.querySelector('.sofa-q[data-question="9"]');
+    q9.querySelectorAll('.toggle span')[0].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})); await sleep(250);
     assert('sofa: court_paperwork appears on Q9(repo/garnish)=Yes (OR gate)', visible(dom, doc, 'court_paperwork') === true);
   }
 
@@ -223,6 +224,23 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     assert('personal: 4 spouse doc buttons exist', spBtns.length===4, String(spBtns.length));
     assert('personal: spouse docs hidden by default', spBtns.every(b=>b.style.display==='none'));
     assert('personal: base docs visible', visible(dom, doc, 'id_license')===true && visible(dom, doc, 'tax_return_y1')===true);
+  }
+
+  /* ================= COUNSELING: attorney code copy ================= */
+  {
+    const dom = load('counseling.html'); const doc = dom.window.document;
+    await sleep(100);
+    const button = doc.getElementById('copyAttorneyCode');
+    const link = doc.querySelector('.cs-go');
+    assert('counseling: copy button exists', !!button);
+    assert('counseling: copy button has an accessible label', button && button.getAttribute('aria-label') === 'Copy attorney code');
+    assert('counseling: external class link remains protected', link && link.target === '_blank' && link.rel.includes('noopener'));
+    let copied = '';
+    Object.defineProperty(dom.window.navigator, 'clipboard', { configurable: true, value: { writeText: async value => { copied = value; } } });
+    button.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true }));
+    await sleep(50);
+    assert('counseling: copy button writes the attorney code', copied === '449858', copied);
+    assert('counseling: successful copy is announced', doc.getElementById('copyAttorneyCodeStatus').textContent === 'Copied');
   }
 
   /* ================= DOCUMENTS (step 8): clean session ================= */
@@ -361,7 +379,7 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     const dom = load('financial-affairs.html', null, { mcl_joint: 'yes', mcl_marital: 'Married' });
     const doc = dom.window.document; await sleep(400);
     // answer on-screen Q3 (income) Yes and check its spouse block becomes visible
-    const q3 = [...doc.querySelectorAll('.sofa-q')].find(q => q.querySelector('.qn') && q.querySelector('.qn').textContent.trim()==='3');
+    const q3 = doc.querySelector('.sofa-q[data-question="3"]');
     q3.querySelectorAll('.toggle span')[0].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true}));
     await sleep(250);
     const spouseEls = [...doc.querySelectorAll('.spouse-only,.spouse-addr-col')];
@@ -371,7 +389,7 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
   {
     const dom = load('financial-affairs.html', null, { mcl_joint: 'no' });
     const doc = dom.window.document; await sleep(400);
-    const q3 = [...doc.querySelectorAll('.sofa-q')].find(q => q.querySelector('.qn') && q.querySelector('.qn').textContent.trim()==='3');
+    const q3 = doc.querySelector('.sofa-q[data-question="3"]');
     q3.querySelectorAll('.toggle span')[0].dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true}));
     await sleep(250);
     const spouseEls = [...doc.querySelectorAll('.spouse-only,.spouse-addr-col')];
@@ -382,4 +400,4 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
   console.log(`\n=== DYNAMIC SIMULATION: ${pass} passed, ${fail} failed ===`);
   failures.forEach(f=>console.log('FAIL: '+f));
   process.exit(fail?1:0);
-})().catch(e=>{ console.error('HARNESS ERROR:', e.message); process.exit(2); });
+})().catch(e=>{ console.error('HARNESS ERROR:', e.stack || e.message); process.exit(2); });

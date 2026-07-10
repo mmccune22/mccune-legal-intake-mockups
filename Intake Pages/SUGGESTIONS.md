@@ -1012,6 +1012,25 @@ enhanced — say the word if wanted.
 
 ---
 
+## Round 48 — Counseling attorney code gets an accessible copy control (2026-07-10)
+**File(s):** counseling.html, gating-test.js, jimmy-changes.js
+
+**What changed:** Added a dedicated copy icon beside attorney code `449858` on
+the Counseling class page. The control uses the browser Clipboard API, falls
+back for older or restricted browsers, announces `Copied` through an ARIA live
+status, and selects the code with a `Press Ctrl+C` prompt if copying is blocked.
+The external Cricket Debt link and code are unchanged. The shared Colab feed
+also records this release and the CRM organization-name/logo synchronization
+completed on 2026-07-10. The harness now covers the clipboard interaction and
+uses deterministic address-API stubs plus stable SOFA question attributes;
+**116/116 dynamic checks pass.**
+
+**Rationale:** Copying is an explicit, keyboard-accessible action with clear
+feedback; opening the external training site does not unexpectedly overwrite
+the debtor's clipboard.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

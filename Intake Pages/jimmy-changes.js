@@ -1,5 +1,5 @@
 window.JIMMY_CHANGE_META = {
-  updated: "2026-07-09",
+  updated: "2026-07-10",
   branch: "main - Matt + Jimmy shared",
   publishUrl: window.location.origin + window.location.pathname,
   mattPublishUrl: "https://mmccune22.github.io/mccune-legal-intake-mockups/Intake%20Pages/",
@@ -9,6 +9,35 @@ window.JIMMY_CHANGE_META = {
 };
 
 window.JIMMY_CHANGE_ITEMS = [
+  {
+    id: "counseling-attorney-code-copy",
+    title: "One-click counseling attorney code",
+    date: "2026-07-10",
+    category: "Client experience",
+    status: "Live on Matt and Jimmy sites",
+    commit: "counseling-copy-code-v1",
+    pages: ["Counseling class"],
+    summary: "The counseling page now places an accessible copy control beside attorney code 449858, confirms when the code is copied, and falls back to selecting the code when clipboard access is unavailable.",
+    mattDecision: "The Cricket Debt link and attorney code are unchanged. Copying requires an explicit debtor action rather than changing the clipboard unexpectedly.",
+    links: [
+      { label: "Open Counseling class", href: "counseling.html" }
+    ]
+  },
+  {
+    id: "crm-organization-branding-sync",
+    title: "CRM organization name and logo sync",
+    date: "2026-07-10",
+    category: "CRM",
+    status: "Live on Jimmy CRM and Intake",
+    commit: "65cb128 + ba44119",
+    pages: ["CRM Settings", "CRM sidebar", "Jimmy Intake"],
+    summary: "Saving an organization name in CRM Settings now updates the CRM sidebar footer and Jimmy Intake branding. PNG/JPG logo uploads are validated, resized for browser storage, and shown on both surfaces with initials as the fallback.",
+    mattDecision: "This is a fake-data review workflow stored in the browser on Jimmy's GitHub Pages origin; it is not approved for real client data.",
+    links: [
+      { label: "Open Jimmy CRM", href: "https://jimmydanol.github.io/bkfl-crm-lite/" },
+      { label: "Open Jimmy Intake", href: "https://jimmydanol.github.io/mccune-legal-intake-mockups-review/Intake%20Pages/login.html" }
+    ]
+  },
   {
     id: "phone-formatting",
     title: "Data intake formatting best practices",
