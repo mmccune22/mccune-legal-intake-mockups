@@ -397,6 +397,59 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     assert('sofa(not joint): spouse/D2 blocks stay hidden', !anyVisible);
   }
 
+  /* ================= UPLOAD CENTER (post-submission, token-gated) ================= */
+  {
+    const dom = load('upload-center.html'); const doc = dom.window.document; const win = dom.window;
+    await sleep(300);
+    assert('uc: gate shown first, center hidden', doc.getElementById('gateView').style.display!=='none' && doc.getElementById('centerView').style.display==='none');
+    // wrong DOB -> error
+    doc.getElementById('dobInp').value = '01/01/1990';
+    doc.getElementById('gateGo').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    assert('uc: wrong DOB shows friendly error', doc.getElementById('gateError').classList.contains('on'));
+    // swap to SSN4 and pass
+    doc.getElementById('gateSwap').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    doc.getElementById('ssnInp').value = '4321';
+    doc.getElementById('gateGo').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    await sleep(100);
+    assert('uc: SSN4 passes gate', doc.getElementById('centerView').style.display!=='none');
+    // three items with verbatim notes
+    const items = [...doc.querySelectorAll('.uc-item')];
+    assert('uc: 3 outstanding items', items.length===3, String(items.length));
+    assert('uc: firm rejection note verbatim', doc.body.textContent.includes('Only 3 of 6 months received — we need all six.'));
+    assert('uc: greeting present', doc.getElementById('greeting').textContent.includes('Hi Linda'));
+    assert('uc: progress 0 of 3', doc.getElementById('progressTxt').textContent.trim()==='0 of 3 done');
+    // upload on first item
+    items[0].querySelector('[data-act="upload"]').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    await sleep(100);
+    assert('uc: item uploaded state + review copy', doc.querySelector('.uc-item.uploaded .uc-state').textContent.includes('your law firm will review'));
+    assert('uc: progress 1 of 3', doc.getElementById('progressTxt').textContent.trim()==='1 of 3 done');
+    // second upload to same item (multi-file)
+    doc.querySelector('.uc-item.uploaded [data-act="upload"]').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    await sleep(100);
+    assert('uc: multiple files per item', doc.querySelectorAll('.uc-item.uploaded .filechip').length===2);
+    // reason on second item
+    let it2 = [...doc.querySelectorAll('.uc-item')].find(el=>el.dataset.item==='bank_statements');
+    it2.querySelector('[data-act="cant"]').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    it2.querySelector('[data-reason="dont_have_copy"]').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    await sleep(100);
+    it2 = [...doc.querySelectorAll('.uc-item')].find(el=>el.dataset.item==='bank_statements');
+    assert('uc: reason recorded', it2.classList.contains('reason') && it2.textContent.includes('Noted:'));
+    // resolve third -> confirmation appears
+    const it3 = [...doc.querySelectorAll('.uc-item')].find(el=>el.dataset.item==='counseling_certificate');
+    it3.querySelector('[data-act="cant"]').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    it3.querySelector('[data-reason="not_taken_yet"]').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    await sleep(900);
+    assert('uc: confirmation after all resolved', doc.getElementById('doneView').style.display!=='none');
+    assert('uc: confirmation copy', doc.getElementById('doneView').textContent.includes('Your law firm will review everything'));
+    // resume: same "link" (fresh load w/ same sessionStorage) skips gate and keeps state
+    const saved = dom.window.sessionStorage.getItem('mcl_uc_demo');
+    const dom2 = load('upload-center.html', null, { mcl_uc_demo: saved });
+    await sleep(300);
+    const doc2 = dom2.window.document;
+    assert('uc: resume skips gate', doc2.getElementById('gateView').style.display==='none');
+    assert('uc: resume restores progress', doc2.getElementById('progressTxt').textContent.trim()==='3 of 3 done');
+  }
+
   console.log(`\n=== DYNAMIC SIMULATION: ${pass} passed, ${fail} failed ===`);
   failures.forEach(f=>console.log('FAIL: '+f));
   process.exit(fail?1:0);

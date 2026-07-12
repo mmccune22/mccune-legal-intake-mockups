@@ -18,7 +18,8 @@ pages so each renders on its own with no build step and no external dependencies
 | `counseling.html` | Stage 7 — credit counseling class (explainer + certificate upload; soft gate) |
 | `documents.html` | Stage 8 — document summary & submit |
 | `jimmy-changes.html` | Stage 9 — Colab changelog, approvals, and conversation |
-| `confirmation.html` | Post-submit thank-you |
+| `confirmation.html` | Post-submit status page (intake locked) |
+| `upload-center.html` | Post-submission Upload Center — token-gated /upload/{token}; identity gate → outstanding items → confirmation (CRM-driven chase list) |
 
 Open `login.html` and click through. Navigation, toggles, document upload/N/A,
 and progress are interactive (front-end only; no back end / no real file storage).

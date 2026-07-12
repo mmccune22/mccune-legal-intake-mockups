@@ -1060,6 +1060,29 @@ one item at a time.
 
 ---
 
+## Round 50 — Post-submission Upload Center (2026-07-12)
+**File(s):** upload-center.html (new), confirmation.html, DOC-LOGIC.md §8a, README.md, gating-test.js
+
+**What changed:**
+- **upload-center.html**: the /upload/{token} mockup, three states in one file —
+  identity gate (DOB, swap to SSN last-4, friendly mismatch error, "secure,
+  private link that only works for you"), Upload Center ("Hi Linda — here's
+  what we still need to keep your case moving": one card per outstanding item
+  with the firm's note verbatim, multi-file upload, "I can't provide this" →
+  five-reason picker, waiting/uploaded/reason states, "N of 3 done" progress,
+  resume on revisit), and confirmation ("Got them. Your law firm will review
+  everything and follow up if anything else is needed."). Linda Tran demo data
+  mirrors the CRM seed; demo identity DOB 03/14/1985 / SSN4 4321. Item shapes
+  and interactions mirror the agreed API contract.
+- **confirmation.html** lock wording per spec: "Your intake is submitted and
+  locked — nothing more to fill out. If we need any documents, we'll email you
+  a secure upload link, and it stays open until we have everything." (hero
+  deduped to say it once).
+- DOC-LOGIC §8a records all six locked decisions + API contract; harness grew
+  17 Upload Center scenarios — **131 dynamic + 107 static, all pass.**
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

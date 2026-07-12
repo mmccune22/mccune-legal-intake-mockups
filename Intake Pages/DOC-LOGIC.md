@@ -172,6 +172,34 @@ document state.
 - Catch-all drop zone: uploads classified by the backend into a `doc_type`,
   debtor confirms; unmatched files land in `other_docs`.
 
+## 8a. Post-submission Upload Center (decided 2026-07-12; mockup: upload-center.html)
+
+The only debtor doorway after submit (per Principle 7). Lives in THIS app as a
+second token-gated route — **/upload/{token}** — reusing intake components and
+styling. Behaves like a password-reset page: nothing renders without a valid
+token.
+
+- **Auth:** magic link + one lightweight identity check — date of birth OR SSN
+  last-4 (data given at intake). No passwords, no account login.
+- **Content:** ONLY the outstanding items, served live from the CRM
+  (bkfl-crm-lite chase list, built from firm review rejections/rulings). One
+  upload slot per requested item, multiple files allowed. NO free-form
+  dropzone — files land pre-categorized. Page shows item names + the firm's
+  notes verbatim; never intake answers or case data.
+- **Item states:** waiting → uploaded ("Got it — your law firm will review")
+  → or reason given. Reason picker: I'll send it later / I don't have a copy /
+  This doesn't apply to me / I didn't file / I haven't taken it yet.
+- **Progress:** "N of M done"; partial progress fine — same link resumes.
+- **Tokens:** per-lead, expiring; every follow-up email carries a fresh link;
+  revoked when the case reaches Ready for Petition Prep.
+- **API contract:** GET /upload-session/{token} → { firstName, firmName,
+  items:[{id,name,note,status}] } · POST /upload/{token}/{itemId} (file) ·
+  POST /reason/{token}/{itemId} (reason code). Uploads flow into the CRM as
+  AI-screened checklist items; the CRM's 5:00 a.m. batch creates the firm's
+  review task.
+- **Tone:** firm-voiced, natural case, no product terms; a short to-do list,
+  not a portal.
+
 ## 8. Approved roadmap (Matt, 2026-07-05) — dev-build items
 
 1. **Bank linking as an alternate satisfier for `bank_statements`.** Offer
