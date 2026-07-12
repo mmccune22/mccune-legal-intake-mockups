@@ -392,10 +392,14 @@ table.exp td:last-child{width:140px;}
       sp.style.cursor='pointer';
       sp.addEventListener('click', function(){ apply(sp.textContent.trim().toLowerCase()); });
     });
-    // restore or init: default to whichever span already has .on, else 'no'
+    // Restore saved or pre-set answers; otherwise leave UNSELECTED (no default).
+    // DECISION (Matt, 2026-07-12, Rounds 52-53): answers feed sworn schedules - blank must
+    // stay blank so validation can catch skipped questions. Never default Yes/No answers.
     var saved = state[PAGE][key];
-    var initial = saved || (Array.prototype.find.call(spans,function(s){return s.classList.contains('on');})||{textContent:'No'}).textContent.trim().toLowerCase();
-    apply(initial);
+    var preset = Array.prototype.find.call(spans,function(s){return s.classList.contains('on');});
+    if(saved) apply(saved);
+    else if(preset) apply(preset.textContent.trim().toLowerCase());
+    else if(cond) cond.style.display='none'; // unselected: both options white, conditional block hidden
   }
 
   /* ---------- 2. Chips (multi-select tap) ---------- */

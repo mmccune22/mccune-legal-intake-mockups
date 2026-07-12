@@ -1118,6 +1118,22 @@ per-section explicit "None of these apply to me" bulk control (debtor
 consciously asserts it; stored as their statement) is the approved pattern —
 say the word and it gets built.
 
+## Round 53 — Default-to-No purged from ALL pages (2026-07-12)
+**File(s):** income.html, debts.html, expenses.html, financial-affairs.html
+**What changed:** Matt spotted Financial Affairs still pre-selecting No after
+Round 52. Root cause: the legacy toggle-init ("default to whichever span
+already has .on, else 'no'") predates Jimmy's Assets change and existed in
+FOUR pages — Income, Debts, Expenses, Financial Affairs. Jimmy's b776ad7 was
+actually copying the existing pattern to Assets, not inventing it. All four
+now match Assets: saved answer restored, pre-set .on honored, otherwise the
+toggle stays UNSELECTED and its conditional block stays hidden. No markup
+presets exist anywhere, so every question now starts blank. Harness:
+**133 dynamic + 107 static, all pass** (no assertions relied on the defaults).
+**Rationale:** Same as Round 52 — sworn-schedule answers must be explicit;
+blank ≠ No; a silent default is invisible to validation. Standing rule now
+actually enforced project-wide: **no Yes/No answer defaults anywhere in the
+intake.**
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
