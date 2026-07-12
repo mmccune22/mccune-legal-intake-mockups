@@ -397,7 +397,7 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     assert('sofa(not joint): spouse/D2 blocks stay hidden', !anyVisible);
   }
 
-  /* ================= UPLOAD CENTER (post-submission, token-gated) ================= */
+  /* ============ CLIENT DOCUMENT UPLOAD PORTAL (post-submission, token-gated) ============ */
   {
     const dom = load('upload-center.html'); const doc = dom.window.document; const win = dom.window;
     await sleep(300);

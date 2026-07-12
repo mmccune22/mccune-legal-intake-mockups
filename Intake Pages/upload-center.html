@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Upload Center — McCune Legal</title>
+<title>Document Upload Portal — McCune Legal</title>
 <style>
 :root{
   --firm-name:"McCune Legal";
@@ -51,7 +51,7 @@ label{font-size:14px;font-weight:600;}
 .reassure{text-align:center;font-size:12px;color:var(--muted);margin-top:14px;}
 .reassure b{color:var(--brand-primary);}
 
-/* ---- upload center ---- */
+/* ---- upload portal ---- */
 .progressline{display:flex;align-items:center;gap:12px;margin:0 0 18px;}
 .progressline .txt{font-size:13.5px;font-weight:700;color:var(--brand-primary);white-space:nowrap;}
 .pbar{flex:1;height:9px;border-radius:6px;background:var(--line);overflow:hidden;}
@@ -107,7 +107,7 @@ label{font-size:14px;font-weight:600;}
 </head>
 <body>
 
-<p class="mock-note"><strong>Mockup — post-submission Upload Center</strong> (token-gated route <code>/upload/{token}</code>, opened from the firm&rsquo;s follow-up email). Three states in one file: identity gate → upload list → confirmation. Demo identity: DOB <code>03/14/1985</code> or SSN last-4 <code>4321</code> (Linda Tran seed). Items array mirrors <code>GET /upload-session/{token}</code> → <code>{ firstName, firmName, items:[{id,name,note,status}] }</code>; uploads → <code>POST /upload/{token}/{itemId}</code>, reasons → <code>POST /reason/{token}/{itemId}</code>. State persists in this browser tab, so the same link resumes where Linda left off.</p>
+<p class="mock-note"><strong>Mockup — client document upload portal (post-submission)</strong> (token-gated route <code>/upload/{token}</code>, opened from the firm&rsquo;s follow-up email). Three states in one file: identity gate → upload list → confirmation. Demo identity: DOB <code>03/14/1985</code> or SSN last-4 <code>4321</code> (Linda Tran seed). Items array mirrors <code>GET /upload-session/{token}</code> → <code>{ firstName, firmName, items:[{id,name,note,status}] }</code>; uploads → <code>POST /upload/{token}/{itemId}</code>, reasons → <code>POST /reason/{token}/{itemId}</code>. State persists in this browser tab, so the same link resumes where Linda left off.</p>
 
 <!-- ============ STATE 1: IDENTITY GATE ============ -->
 <div class="gatewrap" id="gateView">
@@ -132,7 +132,7 @@ label{font-size:14px;font-weight:600;}
   </div>
 </div>
 
-<!-- ============ STATE 2: UPLOAD CENTER ============ -->
+<!-- ============ STATE 2: UPLOAD PORTAL (outstanding items) ============ -->
 <div class="app" id="centerView" style="display:none">
   <div class="hdr">
     <div class="firm"><span class="nm">MCCUNE LEGAL</span><span class="tg">We help people struggling with debt</span></div>
@@ -238,7 +238,7 @@ label{font-size:14px;font-weight:600;}
     else { document.getElementById('gateError').classList.add('on'); }
   });
 
-  /* ---- upload center ---- */
+  /* ---- upload portal ---- */
   function resolvedCount(){
     return SESSION.items.filter(function(it){ var s=state.items[it.id]; return s.status==='uploaded'||s.status==='reason'; }).length;
   }

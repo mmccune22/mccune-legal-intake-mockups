@@ -1083,6 +1083,21 @@ one item at a time.
 
 ---
 
+## Round 51 — Naming: "client document upload portal" (2026-07-12)
+**File(s):** upload-center.html, DOC-LOGIC.md §8a, README.md, gating-test.js
+**What changed:** Official term for the post-submission upload page is now
+**client document upload portal** (Matt's call — lean into standard legal
+practice-management "client portal" language; earlier drafts said "Upload
+Center"). Browser-tab title → "Document Upload Portal — McCune Legal";
+mock-note, README row, §8a heading, and test-file comments updated. Filename
+stays `upload-center.html` and the route stays `/upload/{token}` — no link or
+code references break. Debtor-facing copy unchanged: §8a tone rule still says
+the page reads like a short to-do list, never a heavyweight account portal.
+**Rationale:** One shared vocabulary across CRM, follow-up emails, and dev
+docs. The CRM chase list and the portal's item list are the same list (GET
+/upload-session/{token}); calling both sides "the portal request" keeps
+firm-side conversation unambiguous.
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

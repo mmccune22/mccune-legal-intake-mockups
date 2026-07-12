@@ -172,7 +172,13 @@ document state.
 - Catch-all drop zone: uploads classified by the backend into a `doc_type`,
   debtor confirms; unmatched files land in `other_docs`.
 
-## 8a. Post-submission Upload Center (decided 2026-07-12; mockup: upload-center.html)
+## 8a. Client Document Upload Portal (post-submission; decided 2026-07-12; mockup: upload-center.html)
+
+**Official name (Matt, 2026-07-12): "client document upload portal"** — the
+firm/CRM-side term, leaning into standard practice-management language.
+(Earlier drafts said "Upload Center.") Debtor-facing copy stays a warm, short
+to-do list; the debtor never sees the word "portal" except the browser-tab
+title ("Document Upload Portal — {firm}").
 
 The only debtor doorway after submit (per Principle 7). Lives in THIS app as a
 second token-gated route — **/upload/{token}** — reusing intake components and
@@ -197,8 +203,8 @@ token.
   POST /reason/{token}/{itemId} (reason code). Uploads flow into the CRM as
   AI-screened checklist items; the CRM's 5:00 a.m. batch creates the firm's
   review task.
-- **Tone:** firm-voiced, natural case, no product terms; a short to-do list,
-  not a portal.
+- **Tone:** firm-voiced, natural case, no product terms; reads like a short
+  to-do list, never like a heavyweight account portal.
 
 ## 8. Approved roadmap (Matt, 2026-07-05) — dev-build items
 
