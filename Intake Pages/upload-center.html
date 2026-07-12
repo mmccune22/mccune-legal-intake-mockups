@@ -120,7 +120,7 @@ label{font-size:14px;font-weight:600;}
     <div class="gate-error" id="gateError">That doesn&rsquo;t match what we have on file. Please double-check and try again &mdash; or use the other option below.</div>
     <div class="field" id="dobField">
       <label for="dobInp">Date of birth</label>
-      <input class="inp" id="dobInp" placeholder="MM/DD/YYYY" inputmode="numeric" autocomplete="off"/>
+      <input class="inp" id="dobInp" placeholder="MM/DD/YYYY" inputmode="numeric" autocomplete="off"/><span style="font-size:12px;color:var(--faint);">Just type the numbers — we&rsquo;ll add the slashes for you.</span>
     </div>
     <div class="field" id="ssnField" style="display:none">
       <label for="ssnInp">Last 4 digits of your Social Security number</label>
@@ -175,8 +175,22 @@ label{font-size:14px;font-weight:600;}
       { id:'counseling_certificate', name:'Credit counseling certificate', note:'Not taken yet — here’s how to complete it.', link:{href:'https://www.cricketdebt.com/signup/449858', label:'Take the class →'}, status:'waiting' }
     ]
   };
-  var DEMO_DOB = ['03/14/1985','3/14/1985','03141985'];
+  var DEMO_DOB_DIGITS = '03141985';
   var DEMO_SSN4 = '4321';
+  function digitsOnly(v){ return String(v||'').replace(/\D/g,''); }
+  /* DOB mask: type digits, slashes appear automatically (MM/DD/YYYY) */
+  var dobEl = document.getElementById('dobInp');
+  dobEl.addEventListener('input', function(){
+    var d = digitsOnly(this.value).slice(0,8);
+    var out = d;
+    if(d.length > 4) out = d.slice(0,2) + '/' + d.slice(2,4) + '/' + d.slice(4);
+    else if(d.length > 2) out = d.slice(0,2) + '/' + d.slice(2);
+    this.value = out;
+  });
+  /* SSN last-4: digits only */
+  document.getElementById('ssnInp').addEventListener('input', function(){
+    this.value = digitsOnly(this.value).slice(0,4);
+  });
   var KEY = 'mcl_uc_demo';
 
   var state = { gate:false, items:{} };
@@ -218,8 +232,8 @@ label{font-size:14px;font-weight:600;}
   });
   document.getElementById('gateGo').addEventListener('click', function(){
     var ok;
-    if(usingSSN){ ok = document.getElementById('ssnInp').value.trim() === DEMO_SSN4; }
-    else { var v = document.getElementById('dobInp').value.trim(); ok = DEMO_DOB.indexOf(v) >= 0; }
+    if(usingSSN){ ok = digitsOnly(document.getElementById('ssnInp').value) === DEMO_SSN4; }
+    else { ok = digitsOnly(document.getElementById('dobInp').value) === DEMO_DOB_DIGITS; }
     if(ok){ state.gate = true; persist(); show('center'); render(); }
     else { document.getElementById('gateError').classList.add('on'); }
   });

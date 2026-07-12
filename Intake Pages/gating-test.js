@@ -406,6 +406,17 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     doc.getElementById('dobInp').value = '01/01/1990';
     doc.getElementById('gateGo').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
     assert('uc: wrong DOB shows friendly error', doc.getElementById('gateError').classList.contains('on'));
+    // DOB mask: raw digits get slashes inserted automatically
+    const dob = doc.getElementById('dobInp');
+    dob.value = '03141985';
+    dob.dispatchEvent(new win.Event('input',{bubbles:true}));
+    assert('uc: DOB mask auto-inserts slashes', dob.value === '03/14/1985', dob.value);
+    doc.getElementById('gateGo').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
+    await sleep(100);
+    assert('uc: masked DOB passes gate', doc.getElementById('centerView').style.display!=='none');
+    // reset to test the SSN path too
+    dom.window.sessionStorage.removeItem('mcl_uc_demo');
+    doc.getElementById('gateView').style.display=''; doc.getElementById('centerView').style.display='none';
     // swap to SSN4 and pass
     doc.getElementById('gateSwap').dispatchEvent(new win.MouseEvent('click',{bubbles:true}));
     doc.getElementById('ssnInp').value = '4321';
