@@ -117,7 +117,7 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     assert('assets: foreclosure appears on behind=Yes', visible(dom, doc, 'foreclosure_docs') === true);
     clickYes(dom, doc, 'vehTg', 0); await sleep(250);
     assert('assets: kbb appears on vehicles=Yes', visible(dom, doc, 'kbb_valuation') === true);
-    assert('assets: title appears because financed defaults to No', visible(dom, doc, 'vehicle_title') === true);
+    assert('assets: title hidden until financed is answered (no default — Round 52)', visible(dom, doc, 'vehicle_title') === false);
     assert('assets: financed toggle found+clicked No', clickToggleByLabel(dom, doc, 'financed', 1)); await sleep(250);
     assert('assets: title appears on financed=No', visible(dom, doc, 'vehicle_title') === true);
     clickToggleByLabel(dom, doc, 'financed', 0); await sleep(250);

@@ -417,12 +417,14 @@ table.exp td:last-child{width:140px;}
       sp.style.cursor='pointer';
       sp.addEventListener('click', function(){ apply(sp.textContent.trim().toLowerCase()); });
     });
-    // Restore saved or pre-set answers; unanswered asset questions default to No.
+    // Restore from saved answer or a pre-set .on; otherwise leave UNSELECTED (no default).
+    // DECISION (Matt, 2026-07-12, Round 52): answers feed sworn schedules — blank must stay
+    // blank so validation can catch skipped questions. Never default Yes/No answers.
     var saved = state[PAGE][key];
     var preset = Array.prototype.find.call(spans,function(s){return s.classList.contains('on');});
     if(saved) apply(saved);
     else if(preset) apply(preset.textContent.trim().toLowerCase());
-    else apply('no');
+    // else: no selection — both options stay white; page validation requires an explicit answer
   }
 
   /* ---------- 2. Chips (multi-select tap) ---------- */

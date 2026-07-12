@@ -1098,6 +1098,26 @@ docs. The CRM chase list and the portal's item list are the same list (GET
 /upload-session/{token}); calling both sides "the portal request" keeps
 firm-side conversation unambiguous.
 
+## Round 52 — Revert "Assets default to No": blank stays blank (2026-07-12)
+**File(s):** assets.html, gating-test.js
+**What changed:** Reverted the behavior introduced in "Default Assets questions
+to No" (b776ad7): unanswered Yes/No questions on Assets no longer pre-select
+No. They start unselected, and an explicit answer is required — restoring the
+project-wide rule (Rounds 44–46) that **blank ≠ No**. Jimmy's companion
+`syncInitialReveals` helper is kept (it behaves correctly either way).
+Harness assertion updated: vehicle title now stays hidden until the financed
+question is explicitly answered No. **133 dynamic + 107 static, all pass.**
+**Rationale (Matt's decision, 2026-07-12):** These answers feed sworn
+schedules signed under penalty of perjury. A defaulted No is indistinguishable
+from a considered No — a skimmed-past "own real estate?" would silently omit
+an asset and its document requests, and validation could never catch it
+because nothing is ever unanswered. Affirmative answers to every question get
+more accurate responses. **Standing rule for the build: never default a
+Yes/No answer anywhere in the intake.** If we want the speed benefit later, a
+per-section explicit "None of these apply to me" bulk control (debtor
+consciously asserts it; stored as their statement) is the approved pattern —
+say the word and it gets built.
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
