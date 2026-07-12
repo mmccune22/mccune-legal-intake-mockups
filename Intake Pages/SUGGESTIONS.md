@@ -1045,6 +1045,21 @@ audit trail.
 
 ---
 
+## Round 49 — Confirmation page copy per Matt (2026-07-12)
+**File(s):** confirmation.html
+
+**What changed:** Steps rewritten: 1) We review what you sent — if anything is
+missing we email a secure upload link; 2) We prepare your case — begins once
+all required documents AND the upfront payment are in (payment handled
+separately, outside the intake); firm reaches out with questions; 3) You meet
+with your attorney to decide the best path forward. Removed the "Book my
+strategy session" CTA and the sample "Still on the list" block; replaced with
+the lock statement: the intake form is locked once submitted, and all
+additional documents go directly to the firm through secure portal links —
+one item at a time.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
