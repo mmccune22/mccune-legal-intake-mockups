@@ -25,6 +25,13 @@ FIELD-MAP.md (fields → form lines) and DOC-REQUESTS.md (pre-redesign inventory
    T3 never inflates the denominator.
 6. **Submit gate:** hard-block only on unresolved T1; soft modal ("submit now,
    add later") when T2 items are open or marked *will send later*.
+7. **Submit = lock (decision 2026-07-10).** Once submitted, the intake is
+   closed and read-only — nobody re-enters the form, including the debtor.
+   Post-submit sign-in lands on the status page (confirmation), never the form.
+   ALL post-submit document collection flows through the CRM: each open item
+   gets its own secure single-item upload link. Corrections to answers happen
+   attorney-side via the CRM, with an audit trail — never by re-opening the
+   intake.
 
 ## 2. Trigger fields
 

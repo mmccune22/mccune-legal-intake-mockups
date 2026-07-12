@@ -1031,6 +1031,20 @@ the debtor's clipboard.
 
 ---
 
+## Round 48 — Submit = lock; confirmation aligned with CRM follow-up (2026-07-10)
+**File(s):** confirmation.html, DOC-LOGIC.md
+
+**What changed (Matt's decision, from the CRM side):** a submitted intake is
+closed and locked — nobody goes back in. confirmation.html: "Back to my
+documents" footer link removed (replaced with a lock note), hero explains the
+closure in plain language, open-items block now says each item gets its own
+secure single-item upload link from the office. DOC-LOGIC Principle 7 records
+the dev rule: post-submit sign-in lands on the status page; all follow-up
+collection flows through the CRM; answer corrections are attorney-side with an
+audit trail.
+
+---
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
