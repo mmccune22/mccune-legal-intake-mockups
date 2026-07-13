@@ -399,7 +399,7 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
 
   /* ============ CLIENT DOCUMENT UPLOAD PORTAL (post-submission, token-gated) ============ */
   {
-    const dom = load('upload-center.html'); const doc = dom.window.document; const win = dom.window;
+    const dom = load('client-portal.html'); const doc = dom.window.document; const win = dom.window;
     await sleep(300);
     assert('uc: gate shown first, center hidden', doc.getElementById('gateView').style.display!=='none' && doc.getElementById('centerView').style.display==='none');
     // wrong DOB -> error
@@ -454,7 +454,7 @@ function railCount(doc){ const c=doc.querySelector('.docbar .count'); return c?c
     assert('uc: confirmation copy', doc.getElementById('doneView').textContent.includes('Your law firm will review everything'));
     // resume: same "link" (fresh load w/ same sessionStorage) skips gate and keeps state
     const saved = dom.window.sessionStorage.getItem('mcl_uc_demo');
-    const dom2 = load('upload-center.html', null, { mcl_uc_demo: saved });
+    const dom2 = load('client-portal.html', null, { mcl_uc_demo: saved });
     await sleep(300);
     const doc2 = dom2.window.document;
     assert('uc: resume skips gate', doc2.getElementById('gateView').style.display==='none');

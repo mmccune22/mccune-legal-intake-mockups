@@ -1153,6 +1153,26 @@ verified against the brief line by line — no changes needed.
 handling; it must describe what the CRM actually does now that the review
 workflow exists.
 
+## Round 55 — Naming settled: CLIENT PORTAL; one-link model; /portal/{token} (2026-07-13)
+**File(s):** client-portal.html (renamed from upload-center.html), DOC-LOGIC.md, confirmation.html, README.md, gating-test.js
+**What changed:** (Second CRM-window brief, 2026-07-13.) Final name is
+**Client Portal** — supersedes "Upload Center" and Round 51's "client
+document upload portal." Debtor-facing phrase: "your secure client portal."
+File renamed via git mv to `client-portal.html` (history preserved); tab
+title now "Client Portal — McCune Legal"; page route is **/portal/{token}**
+(API endpoints unchanged: GET /upload-session/{token}, POST
+/upload/{token}/{itemId}, POST /reason/{token}/{itemId}). DOC-LOGIC
+Principle 7 corrected: ONE secure link per follow-up email opens the portal
+with every outstanding item — supersedes the 2026-07-10 single-item-link
+note. confirmation.html lock note now reads "...we'll email you a secure
+link to your client portal, and it stays open until we have everything."
+§4 firm-ruling correction was already done in Round 54. Harness loads the
+renamed file; **133 dynamic + 107 static, all pass.**
+**Rationale:** Both BK Fast Lane windows now share one vocabulary (doc_type
+id = the contract; catalogs verified in sync 2026-07-13) and one follow-up
+model. One link per email is simpler to explain, simpler to build, and the
+portal already lists everything outstanding.
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

@@ -19,7 +19,7 @@ pages so each renders on its own with no build step and no external dependencies
 | `documents.html` | Stage 8 — document summary & submit |
 | `jimmy-changes.html` | Stage 9 — Colab changelog, approvals, and conversation |
 | `confirmation.html` | Post-submit status page (intake locked) |
-| `upload-center.html` | Client document upload portal (post-submission) — token-gated /upload/{token}; identity gate → outstanding items → confirmation (CRM-driven chase list) |
+| `client-portal.html` | Client Portal (post-submission) — token-gated /portal/{token}, ONE secure link per follow-up email; identity gate → outstanding items → confirmation (CRM-driven chase list) |
 
 Open `login.html` and click through. Navigation, toggles, document upload/N/A,
 and progress are interactive (front-end only; no back end / no real file storage).

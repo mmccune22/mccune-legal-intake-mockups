@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Document Upload Portal — McCune Legal</title>
+<title>Client Portal — McCune Legal</title>
 <style>
 :root{
   --firm-name:"McCune Legal";
@@ -107,7 +107,7 @@ label{font-size:14px;font-weight:600;}
 </head>
 <body>
 
-<p class="mock-note"><strong>Mockup — client document upload portal (post-submission)</strong> (token-gated route <code>/upload/{token}</code>, opened from the firm&rsquo;s follow-up email). Three states in one file: identity gate → upload list → confirmation. Demo identity: DOB <code>03/14/1985</code> or SSN last-4 <code>4321</code> (Linda Tran seed). Items array mirrors <code>GET /upload-session/{token}</code> → <code>{ firstName, firmName, items:[{id,name,note,status}] }</code>; uploads → <code>POST /upload/{token}/{itemId}</code>, reasons → <code>POST /reason/{token}/{itemId}</code>. State persists in this browser tab, so the same link resumes where Linda left off.</p>
+<p class="mock-note"><strong>Mockup — Client Portal (post-submission)</strong> (token-gated route <code>/portal/{token}</code>, opened from the ONE secure link in each follow-up email — every outstanding item in one place). Three states in one file: identity gate → upload list → confirmation. Demo identity: DOB <code>03/14/1985</code> or SSN last-4 <code>4321</code> (Linda Tran seed). Items array mirrors <code>GET /upload-session/{token}</code> → <code>{ firstName, firmName, items:[{id,name,note,status}] }</code>; uploads → <code>POST /upload/{token}/{itemId}</code>, reasons → <code>POST /reason/{token}/{itemId}</code>. State persists in this browser tab, so the same link resumes where Linda left off.</p>
 
 <!-- ============ STATE 1: IDENTITY GATE ============ -->
 <div class="gatewrap" id="gateView">

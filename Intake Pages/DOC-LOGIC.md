@@ -28,8 +28,10 @@ FIELD-MAP.md (fields → form lines) and DOC-REQUESTS.md (pre-redesign inventory
 7. **Submit = lock (decision 2026-07-10).** Once submitted, the intake is
    closed and read-only — nobody re-enters the form, including the debtor.
    Post-submit sign-in lands on the status page (confirmation), never the form.
-   ALL post-submit document collection flows through the CRM: each open item
-   gets its own secure single-item upload link. Corrections to answers happen
+   ALL post-submit document collection flows through the Client Portal:
+   each follow-up email carries ONE secure link that opens the portal with
+   every outstanding item (settled 2026-07-13; supersedes the 2026-07-10
+   single-item-link note). Corrections to answers happen
    attorney-side via the CRM, with an audit trail — never by re-opening the
    intake.
 
@@ -185,16 +187,16 @@ document state.
 - Catch-all drop zone: uploads classified by the backend into a `doc_type`,
   debtor confirms; unmatched files land in `other_docs`.
 
-## 8a. Client Document Upload Portal (post-submission; decided 2026-07-12; mockup: upload-center.html)
+## 8a. Client Portal (post-submission; decided 2026-07-12; mockup: client-portal.html)
 
-**Official name (Matt, 2026-07-12): "client document upload portal"** — the
-firm/CRM-side term, leaning into standard practice-management language.
-(Earlier drafts said "Upload Center.") Debtor-facing copy stays a warm, short
-to-do list; the debtor never sees the word "portal" except the browser-tab
-title ("Document Upload Portal — {firm}").
+**Official name (settled 2026-07-13): "Client Portal"** — use everywhere;
+supersedes the working names "Upload Center" and "client document upload
+portal" (Round 51). In debtor-facing text: **"your secure client portal."**
+Debtor-facing copy stays a warm, short to-do list; browser-tab title is
+"Client Portal — {firm}".
 
 The only debtor doorway after submit (per Principle 7). Lives in THIS app as a
-second token-gated route — **/upload/{token}** — reusing intake components and
+second token-gated route — **/portal/{token}** — reusing intake components and
 styling. Behaves like a password-reset page: nothing renders without a valid
 token.
 
