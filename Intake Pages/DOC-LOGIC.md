@@ -110,16 +110,29 @@ amounts + bank statements suffice).
 Debtor taps **"I don't have this"** → one-tap reason. Stored per item as
 `reason`, with timestamp.
 
-| Reason code | Debtor sees | Follow-up behavior |
+Downstream handling follows the CRM's **firm-ruling model** (bkfl-crm-lite,
+built 2026-07-12): two reasons chase automatically; the other three wait for
+a firm ruling — **Excuse** closes the item as not applicable, **Keep Chasing**
+puts it on the follow-up list. No reason self-closes an item. Debtor-facing
+behavior in the intake is identical for all five.
+
+| Reason code | Debtor sees | Follow-up behavior (CRM) |
 |---|---|---|
-| `will_send_later` | "I'll send it later" | Item stays on the chase list; reminder emails reference it |
-| `dont_have_copy` | "I don't have a copy" | Chase list, softer cadence; attorney may pull alternative source |
-| `doesnt_apply` | "This doesn't apply to me" | Closes item; flags answer-mismatch for attorney review (trigger said it applies) |
-| `didnt_file` | "I didn't file that year" | Tax returns only. Closes item; flags for attorney (means test / Form 122 implications) |
-| `not_taken_yet` | "I haven't taken the class yet" | Counseling only. Chase list with class link; blocks FILING, not submit |
+| `will_send_later` | "I'll send it later" | Chases automatically — stays on the chase list; reminder emails reference it |
+| `dont_have_copy` | "I don't have a copy" | Awaits firm ruling: Excuse (close, not applicable) or Keep Chasing; attorney may pull alternative source |
+| `doesnt_apply` | "This doesn't apply to me" | Awaits firm ruling: Excuse or Keep Chasing; flags answer-mismatch for attorney review (trigger said it applies) |
+| `didnt_file` | "I didn't file that year" | Tax returns only. Awaits firm ruling: Excuse or Keep Chasing; flags for attorney (means test / Form 122 implications) |
+| `not_taken_yet` | "I haven't taken the class yet" | Counseling only. Chases automatically — chase list with class link; blocks FILING, not submit |
 
 `doesnt_apply` on a triggered item is a signal, not an error — the debtor may
-know something the form doesn't. Surface these in the attorney dashboard.
+know something the form doesn't. Surface these in the attorney dashboard for
+the ruling.
+
+**Catalog sync (verified 2026-07-13):** programmatic cross-check against
+bkfl-crm-lite confirmed both windows carry the same 32 doc_types (ids 1:1 in
+both directions), agreeing T1/required tiers, and these five reason codes
+verbatim. **Rule: the `doc_type` id is the shared contract between the two
+windows; debtor-facing and firm-facing labels may differ per audience.**
 
 ## 5. Dedup & satisfaction rules
 

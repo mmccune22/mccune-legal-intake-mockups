@@ -1134,6 +1134,25 @@ blank ≠ No; a silent default is invisible to validation. Standing rule now
 actually enforced project-wide: **no Yes/No answer defaults anywhere in the
 intake.**
 
+## Round 54 — CRM loop closed: §4 firm-ruling model + catalog sync recorded (2026-07-13)
+**File(s):** DOC-LOGIC.md §4
+**What changed:** (Task brief from the CRM window, 2026-07-13.) §4's
+"Follow-up behavior" column predated the CRM's firm-ruling model — corrected:
+`dont_have_copy`, `doesnt_apply`, `didnt_file` no longer self-close or
+auto-chase; they await a firm ruling in bkfl-crm-lite (Excuse = close as not
+applicable; Keep Chasing = follow-up list). `will_send_later` and
+`not_taken_yet` still chase automatically. Debtor-facing intake behavior
+unchanged. Also recorded the 2026-07-13 programmatic cross-check: both
+windows in perfect sync — 32 doc_types, ids 1:1 both directions, T1 tiers
+agreeing, five reason codes identical — and the standing rule that **the
+doc_type id is the shared contract; debtor/firm labels may differ per
+audience.** Tasks 2 and 3 of the brief (submission lock wording; the client
+document upload portal) were already built to spec in Rounds 48–51 and
+verified against the brief line by line — no changes needed.
+**Rationale:** DOC-LOGIC is the intake-side source of truth for downstream
+handling; it must describe what the CRM actually does now that the review
+workflow exists.
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
