@@ -1173,6 +1173,21 @@ id = the contract; catalogs verified in sync 2026-07-13) and one follow-up
 model. One link per email is simpler to explain, simpler to build, and the
 portal already lists everything outstanding.
 
+## Round 56 — Bundle rule: doc_type = folder, not file (2026-07-13)
+**File(s):** DOC-LOGIC.md §6.1 (new)
+**What changed:** Codified Matt's multi-file question into a build rule.
+Originals are stored individually and append-only in the doc_type's
+`files[]` bundle across every upload session (pre-submit rail clicks AND
+post-submit Client Portal); the single PDF the CRM review button shows is a
+generated, stitched view regenerated whenever the bundle changes — never
+the stored record. Review/AI screening stay per-file (partial rejections
+like "only 3 of 6 months" depend on it). No mockup changes needed — rails
+and portal already append file chips per upload.
+**Rationale:** Debtors upload messy mixes (PDFs + photos) over multiple
+visits. Destructive consolidation would break partial rejection, lose the
+audit trail behind sworn schedules, and force re-requests. Consolidation is
+a display layer, never storage.
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)

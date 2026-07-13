@@ -176,6 +176,30 @@ Summary page, section rails, progress bars, submit gate, attorney dashboard,
 and follow-up email generator all read this array. Nothing else tracks
 document state.
 
+### 6.1 Bundle rule — a doc_type is a folder, not a file (Matt, 2026-07-13)
+
+Debtors never have one tidy PDF per category — bank statements arrive as
+several PDFs plus phone photos, across multiple visits to the same upload
+button (and later through the Client Portal). The rule:
+
+1. **Store originals individually, append-only.** Every upload lands in the
+   doc_type's `files[]` bundle with its own name and timestamp. Uploads are
+   never merged, replaced, or overwritten at upload time — before OR after
+   submit. Three statements today + two more tomorrow = a bundle of five.
+2. **The single PDF the firm reviews is a GENERATED view.** The CRM's PDF
+   button renders the bundle stitched in upload order (photos converted to
+   PDF pages first). It is a cache: regenerate whenever the bundle changes;
+   it is never the stored record.
+3. **Review and AI screening are per-file.** Partial rejections ("only 3 of
+   6 months received") require the CRM to know the bundle's pieces — a
+   pre-merged blob would force re-requesting everything.
+4. **Audit trail.** Same principle as blank ≠ No: these feed sworn
+   schedules, so keep an immutable record of exactly what the debtor sent
+   and when. Consolidation is a display layer, never storage.
+
+The mockups already behave this way (rails and portal append file chips per
+upload); this section makes it a build requirement.
+
 ## 7. Step 8 summary behavior
 
 - Groups by section, **T1 group pinned first** ("Required to submit").
