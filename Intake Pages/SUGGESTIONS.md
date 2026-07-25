@@ -1204,6 +1204,19 @@ the firm link/code; the page shouldn't tell debtors uploading is unnecessary
 while simultaneously requesting the upload. "Either way works" resolves the
 inconsistency without adding friction.
 
+## Round 58 — Counseling page goes provider-generic (2026-07-13)
+**What changed:** Removed the only debtor-facing provider name: "Enter it
+when you sign up at Cricket Debt Counseling" → "Enter it when you sign up
+for the counseling class." Take-the-class button, link, and attorney code
+block unchanged. Added a WHITE-LABEL CONFIG comment at the provider block:
+the class link (href) and attorney code are per-firm-partner settings (~30
+approved providers exist); all other copy stays generic — no provider names
+in debtor-facing text.
+**Rationale:** BK Fast Lane is white-label. Each law firm partner picks
+their provider; only the link and code should change per firm. (Dev-facing
+notes in DOC-LOGIC may still name Cricket as McCune Legal's provider — the
+demo seed — that's config, not copy.)
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
