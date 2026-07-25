@@ -1188,6 +1188,22 @@ visits. Destructive consolidation would break partial rejection, lose the
 audit trail behind sworn schedules, and force re-requests. Consolidation is
 a display layer, never storage.
 
+## Round 57 — Counseling copy: upload option no longer contradicted (2026-07-13)
+**File(s):** counseling.html
+**What changed:** (India review feedback via Matt.) The take-the-class block
+said "There's nothing for you to print or upload," which contradicted the
+rail's Counseling class certificate upload box and the "Already took the
+class?" tip directly below it. New copy keeps the auto-delivery promise but
+ties it to the code and offers the upload path: "**When you finish, your
+attorney gets your certificate automatically** — as long as you used the
+attorney code above. If you get a copy of your certificate, you can also add
+it with the **Counseling class certificate** button on the left. Either way
+works." No behavior change; doc_type counseling_certificate unchanged.
+**Rationale:** Auto-delivery only happens when the debtor signs up through
+the firm link/code; the page shouldn't tell debtors uploading is unnecessary
+while simultaneously requesting the upload. "Either way works" resolves the
+inconsistency without adding friction.
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
