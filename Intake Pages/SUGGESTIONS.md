@@ -1217,6 +1217,24 @@ their provider; only the link and code should change per firm. (Dev-facing
 notes in DOC-LOGIC may still name Cricket as McCune Legal's provider — the
 demo seed — that's config, not copy.)
 
+## Round 59 — Counseling copy: no unverified claims, fee-model-neutral (2026-07-13)
+**File(s):** counseling.html
+**What changed:** Three copy edits, no behavior change. (1) Take-the-class
+paragraph now: "Follow the link below to complete the required class. The
+class takes about an hour — online, on your phone or on a computer." —
+removed "you can stop and come back anytime" (unverified; providers differ).
+(2) Attorney code line ends at "Enter it when you sign up for the counseling
+class." — removed "it covers the cost, so you pay nothing" because some firm
+partners have the debtor pay; static copy must cover both fee models.
+(3) Same fix in the One-short-class intro: "We'll give you a code that
+covers the cost, so there's nothing for you to pay" → "We'll give you a code
+to use when you sign up." The finish paragraph (auto-delivery + upload
+alternative, Round 57) and the Already-took-the-class tip stay as-is per
+Matt.
+**Rationale:** White-label copy can only promise what every partner
+configuration delivers. Cost coverage and pause-and-resume vary by firm and
+provider; the code instruction is universally true.
+
 <!-- Add new rounds below this line. Template:
 
 ## Round N — short title (date)
